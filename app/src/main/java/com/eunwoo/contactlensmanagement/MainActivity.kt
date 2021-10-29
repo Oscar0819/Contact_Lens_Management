@@ -2,9 +2,23 @@ package com.eunwoo.contactlensmanagement
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
+import com.eunwoo.contactlensmanagement.fragment.LensManagementFragment
+import com.eunwoo.contactlensmanagement.fragment.MapFragment
+import com.eunwoo.contactlensmanagement.fragment.ProfileFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var  lensManagementFragment: LensManagementFragment
+    private lateinit var  mapFragment: MapFragment
+    private lateinit var  profileFragment: ProfileFragment
+
+    companion object {
+        const val TAG: String = "로그"
+    }
 
     private lateinit var binding: ActivityMainBinding
 
@@ -15,6 +29,34 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        Log.d(TAG, "MainActivity - onCreate() called")
 
+        initBottomNavigationBar(binding)
+    }
+
+    private fun initBottomNavigationBar(binding: ActivityMainBinding) {
+        binding.bnvMain.setOnItemSelectedListener {
+            when (it.itemId) {
+                R.id.map_fragment_item -> {
+                    Log.d(TAG, "MainActivity - 맵 버튼 클릭")
+                    mapFragment = MapFragment.newInstance()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, mapFragment).commit()
+                }
+                R.id.lens_management_fragment_item -> {
+                    Log.d(TAG, "MainActivity - 맵 버튼 클릭")
+                    lensManagementFragment = LensManagementFragment.newInstance()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, lensManagementFragment).commit()
+                }
+                R.id.profile_fragment_item -> {
+                    Log.d(TAG, "MainActivity - 맵 버튼 클릭")
+                    profileFragment = ProfileFragment.newInstance()
+                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()
+                }
+
+            }
+            true
+        }
+        // 초기 값 세팅
+        binding.bnvMain.selectedItemId = R.id.lens_management_fragment_item
     }
 }

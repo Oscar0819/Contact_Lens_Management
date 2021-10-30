@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.eunwoo.contactlensmanagement.R
+import com.eunwoo.contactlensmanagement.databinding.LensManagementFragmentBinding
+import com.eunwoo.contactlensmanagement.databinding.ProfileFragmentBinding
 
 class ProfileFragment: Fragment() {
     // 싱글톤
@@ -18,6 +20,8 @@ class ProfileFragment: Fragment() {
             return ProfileFragment()
         }
     }
+
+    lateinit var binding: ProfileFragmentBinding
 
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +45,10 @@ class ProfileFragment: Fragment() {
 
         Log.d(TAG, "ProfileFragment - onCreateView() called")
 
-        val view = inflater.inflate(R.layout.profile_fragment, container, false)
+        binding = ProfileFragmentBinding.inflate(inflater, container, false)
+        binding.textView.text = "프로필 뷰바인딩 완료"
 
-        return view
+        return binding.root
         //return super.onCreateView(inflater, container, savedInstanceState)
     }
 }

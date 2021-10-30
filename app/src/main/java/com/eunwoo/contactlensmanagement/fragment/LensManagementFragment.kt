@@ -7,7 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import com.eunwoo.contactlensmanagement.R
+import com.eunwoo.contactlensmanagement.databinding.LensManagementFragmentBinding
 
 class LensManagementFragment: Fragment() {
     // 싱글톤
@@ -18,6 +20,8 @@ class LensManagementFragment: Fragment() {
             return LensManagementFragment()
         }
     }
+
+    private lateinit var binding: LensManagementFragmentBinding
 
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,9 +45,10 @@ class LensManagementFragment: Fragment() {
 
         Log.d(TAG, "LensManagementFragment - onCreateView() called")
 
-        val view = inflater.inflate(R.layout.lens_management_fragment, container, false)
+        binding = LensManagementFragmentBinding.inflate(inflater, container, false)
 
-        return view
-        //return super.onCreateView(inflater, container, savedInstanceState)
+
+
+        return binding.root
     }
 }

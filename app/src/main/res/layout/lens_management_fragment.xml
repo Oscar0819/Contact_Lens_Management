@@ -6,9 +6,24 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@android:color/white">
-    <TextView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lens_record_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </ScrollView>
+    <Button
+        android:id="@+id/lens_management_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="관리"
-        android:textSize="50dp"/>
+        android:text="추가"
+        android:textSize="30dp"/>
+
+
+
+
+
+
 </LinearLayout>

@@ -12,6 +12,8 @@ import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
+
     private lateinit var  lensManagementFragment: LensManagementFragment
     private lateinit var  mapFragment: MapFragment
     private lateinit var  profileFragment: ProfileFragment
@@ -19,8 +21,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG: String = "로그"
     }
-
-    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +43,12 @@ class MainActivity : AppCompatActivity() {
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, mapFragment).commit()
                 }
                 R.id.lens_management_fragment_item -> {
-                    Log.d(TAG, "MainActivity - 맵 버튼 클릭")
+                    Log.d(TAG, "MainActivity - 렌즈 관리 버튼 클릭")
                     lensManagementFragment = LensManagementFragment.newInstance()
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, lensManagementFragment).commit()
                 }
                 R.id.profile_fragment_item -> {
-                    Log.d(TAG, "MainActivity - 맵 버튼 클릭")
+                    Log.d(TAG, "MainActivity - 프로필 버튼 클릭")
                     profileFragment = ProfileFragment.newInstance()
                     supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()
                 }

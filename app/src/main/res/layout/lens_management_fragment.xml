@@ -4,26 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="center"
     android:background="@android:color/white">
-    <ScrollView
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/lens_record_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/lens_record_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </ScrollView>
+        android:layout_height="wrap_content" />
+
     <Button
-        android:id="@+id/lens_management_button"
+        android:id="@+id/lens_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:text="추가"
         android:textSize="30dp"/>
-
-
-
-
 
 
 </LinearLayout>

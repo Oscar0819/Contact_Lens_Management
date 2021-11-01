@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
+import androidx.fragment.app.Fragment
 import com.eunwoo.contactlensmanagement.databinding.ActivityLensInfoBinding
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
 
@@ -37,6 +39,10 @@ class LensInfoActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> {
+                finish()
+                return true
+            }
+            R.id.save -> {
                 finish()
                 return true
             }

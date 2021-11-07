@@ -1,4 +1,4 @@
-package com.eunwoo.contactlensmanagement
+package com.eunwoo.contactlensmanagement.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

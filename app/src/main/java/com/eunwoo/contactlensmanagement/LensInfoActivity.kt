@@ -1,14 +1,17 @@
 package com.eunwoo.contactlensmanagement
 
+import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.eunwoo.contactlensmanagement.databinding.ActivityLensInfoBinding
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
+import java.util.*
 
 class LensInfoActivity : AppCompatActivity() {
 
@@ -29,6 +32,20 @@ class LensInfoActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        binding.calendarButton.setOnClickListener {
+            val today = GregorianCalendar()
+            val year: Int = today.get(Calendar.YEAR)
+            val month: Int = today.get(Calendar.MONTH)
+            val date: Int = today.get(Calendar.DATE)
+
+            val dlg = DatePickerDialog(this, object : DatePickerDialog.OnDateSetListener {
+                override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+                    binding.calendarButton.setText("${year}-${month+1}-${dayOfMonth}")
+                }
+            }, year, month, date)
+            dlg.show()
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

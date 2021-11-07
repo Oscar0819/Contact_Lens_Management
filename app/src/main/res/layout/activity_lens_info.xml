@@ -149,7 +149,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/productNameEditText" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/calendarButton"
                 android:layout_width="150dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="24dp"
@@ -174,7 +174,7 @@
                 android:layout_marginTop="12dp"
                 android:text="유효기간 푸시알림"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/button2" />
+                app:layout_constraintTop_toBottomOf="@+id/calendarButton" />
 
             <TextView
                 android:id="@+id/textView12"
@@ -200,7 +200,7 @@
                 android:text="30"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                app:layout_constraintStart_toEndOf="@+id/button2"
+                app:layout_constraintStart_toEndOf="@+id/calendarButton"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
             <EditText

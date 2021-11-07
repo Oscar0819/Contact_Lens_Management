@@ -1,10 +1,9 @@
-package com.eunwoo.contactlensmanagement
+package com.eunwoo.contactlensmanagement.database
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import kotlinx.coroutines.internal.synchronized
 
 
 @Database(entities = arrayOf(Lens::class), version = 1, exportSchema = false)

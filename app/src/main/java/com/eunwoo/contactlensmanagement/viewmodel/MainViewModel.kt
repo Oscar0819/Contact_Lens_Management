@@ -1,4 +1,4 @@
-package com.eunwoo.contactlensmanagement
+package com.eunwoo.contactlensmanagement.viewmodel
 
 import androidx.lifecycle.ViewModel
 

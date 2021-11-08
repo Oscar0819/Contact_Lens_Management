@@ -61,29 +61,6 @@ class LensManagementFragment: Fragment() {
         binding.lensAddButton.setOnClickListener {
             val intent = Intent(_context, LensInfoActivity::class.java)
             startActivity(intent)
-            // title 입력 다이얼로그를 호출한다.
-            // title 입력하여 리사이클러뷰 addItem
-//            val edittext = EditText(_context)
-//            val builder: AlertDialog.Builder = AlertDialog.Builder(_context)
-//            builder.setTitle("Item 추가")
-//            builder.setMessage("제목을 입력해 주세요.")
-//            builder.setView(edittext)
-//            builder.setPositiveButton("입력"
-//            ) { dialog, which ->
-//                //제목 입력, DB추가
-//                if (!edittext.text.toString().isEmpty()) {
-//                    Thread(Runnable {
-//                        db!!.lensDao().insert( Lens(null, edittext.text.toString(), null))
-//                    }).start()
-//                }
-//                // 변수 intent에 MainActivity2를 Intent()메소드로 intent를 생성
-//
-//            }
-//            builder.setNegativeButton("취소"
-//            ) { dialog, which ->
-//                //취소
-//            }
-//            builder.show()
         }
         db = LensDatabase.getInstance(_context)
         binding.lensRecordRecyclerview.setHasFixedSize(true)

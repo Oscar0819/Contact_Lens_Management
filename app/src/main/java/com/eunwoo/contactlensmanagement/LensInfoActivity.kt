@@ -9,6 +9,8 @@ import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.eunwoo.contactlensmanagement.database.Lens
+import com.eunwoo.contactlensmanagement.database.LensDatabase
 import com.eunwoo.contactlensmanagement.databinding.ActivityLensInfoBinding
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
 import java.util.*
@@ -16,6 +18,8 @@ import java.util.*
 class LensInfoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLensInfoBinding
+
+    private lateinit var db: LensDatabase
 
     companion object {
         const val TAG: String = "로그"
@@ -30,6 +34,7 @@ class LensInfoActivity : AppCompatActivity() {
 
         Log.d(TAG, "LensInfoActivity - onCreate() called")
 
+        db = LensDatabase.getInstance(applicationContext)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -60,11 +65,35 @@ class LensInfoActivity : AppCompatActivity() {
                 return true
             }
             R.id.save -> {
-                finish()
+                save()
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun save() {
+        binding.run {
+            if (this.nameEditText.text.toString().isNotEmpty() and
+                    this.calendarButton.text.toString().isNotEmpty() and
+                    this.expirationDateButton.text.toString().isNotEmpty()) {
+                Thread(Runnable {
+                    db!!.lensDao().insert(Lens(null,
+                        this.nameEditText.text.toString(),
+                        null,
+                        this.leftSightEditText.text.toString().toDouble(),
+                        this.rightSightEditText.text.toString().toDouble(),
+                        this.productNameEditText.text.toString(),
+                        this.calendarButton.text.toString(),
+                        this.expirationDateButton.text.toString(),
+                        this.notificationSwitch.isChecked,
+                        this.memoEditText.text.toString()))
+                    finish()
+                }).start()
+            } else {
+                Toast.makeText(this@LensInfoActivity, "데이터를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 

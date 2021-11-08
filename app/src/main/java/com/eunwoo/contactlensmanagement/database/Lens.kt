@@ -14,5 +14,26 @@ data class Lens(
     var name: String?,
 
     @ColumnInfo(name = "contents")
-    var contents: String?
+    var contents: String?,
+
+    @ColumnInfo(name = "left_sight")
+    var leftSight: Double?,
+
+    @ColumnInfo(name = "right_sight")
+    var rightSight: Double?,
+
+    @ColumnInfo(name = "product_name")
+    var productName: String?,
+
+    @ColumnInfo(name = "initial_date")
+    var initialDate: String?,
+
+    @ColumnInfo(name = "expiration_date")
+    var expirationDate: String?,
+
+    @ColumnInfo(name = "push_check")
+    var pushCheck: Boolean?,
+
+    @ColumnInfo(name = "memo")
+    var memo: String?
 )

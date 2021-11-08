@@ -166,7 +166,7 @@
 
 
             <Switch
-                android:id="@+id/alarmSwitch"
+                android:id="@+id/notificationSwitch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="24dp"
@@ -185,10 +185,10 @@
                 android:layout_marginTop="12dp"
                 android:text="메모"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/alarmSwitch" />
+                app:layout_constraintTop_toBottomOf="@+id/notificationSwitch" />
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/expirationDateButton"
                 android:layout_width="100dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="56dp"

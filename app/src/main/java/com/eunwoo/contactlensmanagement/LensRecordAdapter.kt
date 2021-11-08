@@ -43,7 +43,7 @@ class LensRecordAdapter(val db: LensDatabase, var items: List<Lens>?)
             binding.textView.setText(lens.id.toString())
             binding.textView2.setText(lens.name)
             binding.textView3.setText(lens.contents)
-            binding.button.setOnClickListener { editData(binding.textView.text.toString()) }
+            binding.textView4.setText(lens.initialDate)
         }
         fun editData(contents: String){
             Thread {

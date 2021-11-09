@@ -187,19 +187,19 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/notificationSwitch" />
 
-            <Button
+            <EditText
                 android:id="@+id/expirationDateButton"
                 android:layout_width="100dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="56dp"
                 android:layout_marginLeft="56dp"
                 android:layout_marginTop="8dp"
-                android:background="@android:color/white"
-                android:drawableRight="@drawable/ic_baseline_list_24"
                 android:gravity="center"
+                android:hint="ex)30"
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="16dp"
+                android:inputType="number"
                 app:layout_constraintStart_toEndOf="@+id/calendarButton"
                 app:layout_constraintTop_toBottomOf="@+id/textView10" />
 

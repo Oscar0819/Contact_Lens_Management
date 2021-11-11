@@ -153,9 +153,9 @@
                 android:layout_marginStart="96dp"
                 android:layout_marginLeft="96dp"
                 android:layout_marginTop="12dp"
-                android:text="렌즈 유효기간"
-                android:textSize="16dp"
+                android:text="렌즈 권장 착용기간"
                 android:textColor="@color/black"
+                android:textSize="16dp"
                 app:layout_constraintStart_toEndOf="@+id/textView9"
                 app:layout_constraintTop_toBottomOf="@+id/productNameEditText" />
 
@@ -167,6 +167,7 @@
                 android:layout_marginLeft="24dp"
                 android:layout_marginTop="8dp"
                 android:background="@drawable/border"
+                android:paddingRight="15dp"
                 android:drawableRight="@drawable/ic_baseline_edit_calendar_24"
                 android:gravity="center"
                 android:text=""

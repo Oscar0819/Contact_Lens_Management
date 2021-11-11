@@ -28,7 +28,7 @@ data class Lens(
     @ColumnInfo(name = "initial_date")
     var initialDate: String?,
 
-    @ColumnInfo(name = "expiration_date")
+    @ColumnInfo(name = "recommended_lenses_wear_time")
     var expirationDate: String?,
 
     @ColumnInfo(name = "push_check")

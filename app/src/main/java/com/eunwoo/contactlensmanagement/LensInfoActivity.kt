@@ -8,11 +8,12 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import com.eunwoo.contactlensmanagement.database.Lens
 import com.eunwoo.contactlensmanagement.database.LensDatabase
 import com.eunwoo.contactlensmanagement.databinding.ActivityLensInfoBinding
-import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 import java.util.*
 
 class LensInfoActivity : AppCompatActivity() {
@@ -22,9 +23,14 @@ class LensInfoActivity : AppCompatActivity() {
     private lateinit var db: LensDatabase
 
     companion object {
-        const val TAG: String = "로그"
+        const val TAG: String = "LensInfoActivity"
     }
 
+    // code는 저장, 수정 관련 신호 0 = 저장, 1 = 수정
+    // 기본 디폴트 값
+    private var code: Int = -1
+    private var index: Long = -1
+    private var id: Long = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +43,16 @@ class LensInfoActivity : AppCompatActivity() {
         db = LensDatabase.getInstance(applicationContext)
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        code = intent.getIntExtra("code", 99)
+
+
+        // 수정 요청 확인 후 데이터 세트
+        if (intent.getSerializableExtra("code") == 1) {
+            index = intent.getSerializableExtra("index").toString().toLong()
+            id = intent.getSerializableExtra("id").toString().toLong()
+            initModify()
+        }
 
         binding.calendarButton.setOnClickListener {
             val today = GregorianCalendar()
@@ -55,6 +71,12 @@ class LensInfoActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.lens_info_toolbar_menu, menu)
+        if (code == 0) {
+            menu!!.findItem(R.id.save_or_modify).title = "저장"
+        } else if (code == 1) {
+            menu!!.findItem(R.id.save_or_modify).title = "수정"
+        }
+
         return true
     }
 
@@ -64,12 +86,38 @@ class LensInfoActivity : AppCompatActivity() {
                 finish()
                 return true
             }
-            R.id.save -> {
-                save()
+            R.id.save_or_modify -> {
+                if (code == 0) {
+                    save()
+                } else if(code == 1) {
+                    CoroutineScope(IO).launch {
+                        modify()
+                    }
+                }
+
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private suspend fun modify() {
+        Log.d(TAG, "mINDEX : ${index}")
+        binding.apply {
+            val lens: Lens = Lens(
+                id,
+                nameEditText.text.toString(),
+                leftSightEditText.text.toString().toDouble(),
+                rightSightEditText.text.toString().toDouble(),
+                productNameEditText.text.toString(),
+                calendarButton.text.toString(),
+                expirationDateButton.text.toString(),
+                notificationSwitch.isChecked,
+                memoEditText.text.toString()
+                )
+            db.lensDao().update(lens)
+            finish()
+        }
     }
 
     private fun save() {
@@ -80,7 +128,6 @@ class LensInfoActivity : AppCompatActivity() {
                 Thread(Runnable {
                     db!!.lensDao().insert(Lens(null,
                         this.nameEditText.text.toString(),
-                        null,
                         this.leftSightEditText.text.toString().toDouble(),
                         this.rightSightEditText.text.toString().toDouble(),
                         this.productNameEditText.text.toString(),
@@ -96,5 +143,25 @@ class LensInfoActivity : AppCompatActivity() {
         }
     }
 
+    private fun initModify() {
+
+        Log.d(TAG, "INDEX : ${index}")
+        Thread {
+            val lensData: Lens = db.lensDao().getList()[index.toInt()]
+            binding.apply {
+                nameEditText.setText(lensData.name)
+                leftSightEditText.setText(lensData.leftSight.toString())
+                rightSightEditText.setText(lensData.rightSight.toString())
+                productNameEditText.setText(lensData.productName)
+                calendarButton.setText(lensData.initialDate)
+                expirationDateButton.setText(lensData.expirationDate)
+                memoEditText.setText(lensData.memo)
+                runOnUiThread {
+                    notificationSwitch.isChecked = lensData.pushCheck!!
+                }
+            }
+        }.start()
+    }
 
 }
+

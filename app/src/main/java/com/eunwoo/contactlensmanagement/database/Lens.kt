@@ -13,9 +13,6 @@ data class Lens(
     @ColumnInfo(name = "name")
     var name: String?,
 
-    @ColumnInfo(name = "contents")
-    var contents: String?,
-
     @ColumnInfo(name = "left_sight")
     var leftSight: Double?,
 

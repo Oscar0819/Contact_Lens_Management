@@ -8,6 +8,9 @@ interface LensDao {
     @Query("SELECT * FROM lensTable ORDER BY id DESC")
     fun getAll(): LiveData<List<Lens>>
 
+    @Query("SELECT * FROM lensTable ORDER BY id DESC")
+    fun getList(): List<Lens>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(lens: Lens)
 

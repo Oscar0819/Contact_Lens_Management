@@ -2,6 +2,7 @@ package com.eunwoo.contactlensmanagement.fragment
 
 import android.content.Context
 import android.content.Intent
+import android.icu.lang.UCharacter
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -25,7 +26,7 @@ class LensManagementFragment: Fragment() {
     }
 
     private lateinit var binding: LensManagementFragmentBinding
-    private lateinit var adapter: LensRecordAdapter
+    private lateinit var mAdapter: LensRecordAdapter
 
     private lateinit var db: LensDatabase
 
@@ -59,22 +60,29 @@ class LensManagementFragment: Fragment() {
 //        initSwipe()
 
         binding.lensAddButton.setOnClickListener {
-            val intent = Intent(_context, LensInfoActivity::class.java)
-            startActivity(intent)
+
+            startLensInfoActivity(0)
         }
         db = LensDatabase.getInstance(_context)
         binding.lensRecordRecyclerview.setHasFixedSize(true)
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(_context)
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(_context, LinearLayoutManager.VERTICAL, true)//, LinearLayoutManager.VERTICAL, true
         binding.lensRecordRecyclerview.layoutManager = layoutManager
-
         //UI 갱신 (라이브데이터 Observer 이용, 해당 디비값이 변화가생기면 실행됨)
         db!!.lensDao().getAll().observe(viewLifecycleOwner, androidx.lifecycle.Observer{
             // update UI
-            adapter = LensRecordAdapter(db!!,it)
-            binding.lensRecordRecyclerview.adapter = adapter
+            mAdapter = LensRecordAdapter(db!!,it)
+            binding.lensRecordRecyclerview.adapter = mAdapter
         })
 
         return binding.root
     }
 
+    // code는 저장, 수정 관련 신호 0 = 저장, 1 = 수정
+    fun startLensInfoActivity(code: Int) {
+        val intent = Intent(_context, LensInfoActivity::class.java)
+        intent.putExtra("code", code)
+        intent.putExtra("index", -1)
+        startActivity(intent)
+        
+    }
 }

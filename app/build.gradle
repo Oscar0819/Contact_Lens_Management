@@ -67,5 +67,6 @@ dependencies {
     // Testng
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
 
-
+    // ViewModel
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
 }

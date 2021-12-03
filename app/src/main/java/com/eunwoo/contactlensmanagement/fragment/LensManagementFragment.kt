@@ -18,7 +18,7 @@ import com.eunwoo.contactlensmanagement.databinding.LensManagementFragmentBindin
 class LensManagementFragment: Fragment() {
     // 싱글톤
     companion object {
-        const val TAG: String = "로그"
+        const val TAG: String = "LensManagementFragment"
 
         fun newInstance(): LensManagementFragment {
             return LensManagementFragment()

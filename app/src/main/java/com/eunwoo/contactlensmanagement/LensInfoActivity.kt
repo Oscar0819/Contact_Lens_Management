@@ -8,12 +8,17 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.eunwoo.contactlensmanagement.database.Lens
 import com.eunwoo.contactlensmanagement.database.LensDatabase
 import com.eunwoo.contactlensmanagement.databinding.ActivityLensInfoBinding
-import kotlinx.coroutines.CoroutineScope
+import com.eunwoo.contactlensmanagement.dataclass.LensInfo
+import com.eunwoo.contactlensmanagement.viewmodel.LensInfoViewModel
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.Dispatchers.Main
+import java.lang.Runnable
 import java.util.*
 
 class LensInfoActivity : AppCompatActivity() {
@@ -21,6 +26,8 @@ class LensInfoActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLensInfoBinding
 
     private lateinit var db: LensDatabase
+
+    private lateinit var lensInfoViewModel: LensInfoViewModel
 
     companion object {
         const val TAG: String = "LensInfoActivity"
@@ -144,23 +151,48 @@ class LensInfoActivity : AppCompatActivity() {
     }
 
     private fun initModify() {
-
         Log.d(TAG, "INDEX : ${index}")
-        Thread {
+        lensInfoViewModel = ViewModelProvider(this).get(LensInfoViewModel::class.java)
+
+
+        CoroutineScope(Default).launch {
             val lensData: Lens = db.lensDao().getList()[index.toInt()]
-            binding.apply {
-                nameEditText.setText(lensData.name)
-                leftSightEditText.setText(lensData.leftSight.toString())
-                rightSightEditText.setText(lensData.rightSight.toString())
-                productNameEditText.setText(lensData.productName)
-                calendarButton.setText(lensData.initialDate)
-                expirationDateButton.setText(lensData.expirationDate)
-                memoEditText.setText(lensData.memo)
-                runOnUiThread {
-                    notificationSwitch.isChecked = lensData.pushCheck!!
-                }
-            }
-        }.start()
+            var lensInfo: LensInfo = LensInfo(lensData.name!!,
+                                    lensData.leftSight!!,
+                                    lensData.rightSight!!,
+                                    lensData.productName!!,
+                                    lensData.initialDate!!,
+                                    lensData.expirationDate!!,
+                                    lensData.pushCheck!!,
+                                    lensData.memo!!)
+            CoroutineScope(Main).launch{
+            lensInfoViewModel.updateLensInfo(lensInfo)
+            lensInfoViewModel.getLensInfo().observe(this@LensInfoActivity, androidx.lifecycle.Observer {
+                    binding.apply {
+                        nameEditText.setText(lensInfo.name)
+                        leftSightEditText.setText(lensInfo.leftSight.toString())
+                        rightSightEditText.setText(lensInfo.rightSight.toString())
+                        productNameEditText.setText(lensInfo.productName)
+                        calendarButton.setText(lensInfo.initialDate)
+                        expirationDateButton.setText(lensInfo.expirationDate)
+                        memoEditText.setText(lensInfo.memo)
+                        notificationSwitch.isChecked = lensInfo.pushCheck!!
+                    }
+            })
+        }
+//            binding.apply {
+//                nameEditText.setText(lensData.name)
+//                leftSightEditText.setText(lensData.leftSight.toString())
+//                rightSightEditText.setText(lensData.rightSight.toString())
+//                productNameEditText.setText(lensData.productName)
+//                calendarButton.setText(lensData.initialDate)
+//                expirationDateButton.setText(lensData.expirationDate)
+//                memoEditText.setText(lensData.memo)
+//                runOnUiThread {
+//                    notificationSwitch.isChecked = lensData.pushCheck!!
+//                }
+//            }
+        }
     }
 
 }

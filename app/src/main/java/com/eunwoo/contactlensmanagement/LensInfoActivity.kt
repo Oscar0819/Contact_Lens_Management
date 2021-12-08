@@ -3,11 +3,15 @@ package com.eunwoo.contactlensmanagement
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.DatePicker
+import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import com.eunwoo.contactlensmanagement.database.Lens
 import com.eunwoo.contactlensmanagement.database.LensDatabase
@@ -20,6 +24,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import java.lang.Runnable
 import java.util.*
+import kotlin.collections.ArrayList
 
 class LensInfoActivity : AppCompatActivity() {
 
@@ -154,9 +159,16 @@ class LensInfoActivity : AppCompatActivity() {
         Log.d(TAG, "INDEX : ${index}")
         lensInfoViewModel = ViewModelProvider(this).get(LensInfoViewModel::class.java)
 
-
         CoroutineScope(Default).launch {
             val lensData: Lens = db.lensDao().getList()[index.toInt()]
+            val name: String = lensData.name!!
+            val leftSight: Double = lensData.leftSight!!
+            val rightSight: Double = lensData.rightSight!!
+            val productName: String = lensData.productName!!
+            val initialDate: String = lensData.initialDate!!
+            val expirationDate: String = lensData.expirationDate!!
+            val pushCheck: Boolean = lensData.pushCheck!!
+            val memo: String = lensData.memo!!
             var lensInfo: LensInfo = LensInfo(lensData.name!!,
                                     lensData.leftSight!!,
                                     lensData.rightSight!!,
@@ -180,20 +192,49 @@ class LensInfoActivity : AppCompatActivity() {
                     }
             })
         }
-//            binding.apply {
-//                nameEditText.setText(lensData.name)
-//                leftSightEditText.setText(lensData.leftSight.toString())
-//                rightSightEditText.setText(lensData.rightSight.toString())
-//                productNameEditText.setText(lensData.productName)
-//                calendarButton.setText(lensData.initialDate)
-//                expirationDateButton.setText(lensData.expirationDate)
-//                memoEditText.setText(lensData.memo)
-//                runOnUiThread {
-//                    notificationSwitch.isChecked = lensData.pushCheck!!
-//                }
-//            }
+
+            binding.apply {
+                leftSightEditText.setText(lensData.leftSight.toString())
+                rightSightEditText.setText(lensData.rightSight.toString())
+                productNameEditText.setText(lensData.productName)
+                calendarButton.setText(lensData.initialDate)
+                expirationDateButton.setText(lensData.expirationDate)
+                memoEditText.setText(lensData.memo)
+                notificationSwitch.isChecked = lensData.pushCheck!!
+            }
         }
     }
 
+    fun setTextChanged() {
+        var editTextList: ArrayList<EditText> = ArrayList<EditText>()
+        binding.apply {
+            editTextList.add(nameEditText)
+            editTextList.add(leftSightEditText)
+            editTextList.add(rightSightEditText)
+            editTextList.add(productNameEditText)
+            editTextList.add(memoEditText)
+        }
+        for (i: Int in 0..editTextList.size)
+            editTextList[i].addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    TODO("Not yet implemented")
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    TODO("Not yet implemented")
+                }
+
+            })
+
+    }
 }
 

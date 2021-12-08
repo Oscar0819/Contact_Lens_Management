@@ -23,23 +23,44 @@ class LensInfoViewModel: ViewModel() {
     private val lensInfo: MutableLiveData<LensInfo> by lazy {
         MutableLiveData<LensInfo>()
     }
-
-    private val currentName: String = ""
-    private val currentLeftSight: Double = 0.0
-    private val currentRightSight: Double = 0.0
-    private val currentProductName: String = ""
-    private val currentInitialDate: String = ""
-    private val currentExpirationDate: String = ""
-    private val currentPushCheck: Boolean = false
-    private val currentMemo: String = ""
-
+    private val currentName: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    private val currentLeftSight: MutableLiveData<Double> by lazy {
+        MutableLiveData<Double>()
+    }
+    private val currentRightSight: MutableLiveData<Double> by lazy {
+        MutableLiveData<Double>()
+    }
+    private val currentProductName: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    private val currentInitialDate: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    private val currentExpirationDate: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    private val currentPushCheck: MutableLiveData<Boolean> by lazy {
+        MutableLiveData<Boolean>()
+    }
+    private val currentMemo: MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
 
     fun getLensInfo(): LiveData<LensInfo> {
         return lensInfo
     }
 
     fun updateLensInfo(info: LensInfo) {
-        lensInfo.value = info
+        currentName.value = info.name
+        currentLeftSight.value = info.leftSight
+        currentRightSight.value = info.rightSight
+        currentProductName.value = info.productName
+        currentInitialDate.value = info.initialDate
+        currentExpirationDate.value = info.expirationDate
+        currentPushCheck.value = info.pushCheck
+        currentMemo.value = info.memo
     }
 
 

@@ -52,7 +52,6 @@ class LensRecordAdapter(val db: LensDatabase, var items: List<Lens>?)
             binding.textView3.setText(lens.initialDate)
             binding.textView4.setText(lens.expirationDate)
 
-            // 리사이클러뷰 아이템 클릭 이벤트
 
             itemView.setOnClickListener {
                 Log.d("LRA", "ClickINDEX : $index")

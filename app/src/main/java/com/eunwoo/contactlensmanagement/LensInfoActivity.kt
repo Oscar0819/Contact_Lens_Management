@@ -23,12 +23,6 @@ class LensInfoActivity : AppCompatActivity() {
         const val TAG: String = "LensInfoActivity"
     }
 
-    // code는 저장, 수정 관련 신호 0 = 저장, 1 = 수정
-    // 기본 디폴트 값
-    private var code: Int = -1
-    private var index: Long = -1
-    private var id: Long = -1
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_lens_info)

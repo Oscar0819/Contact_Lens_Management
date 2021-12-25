@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#CCCCCC</color>
+    <color name="thumb_color">#5782D8</color>
+    <color name="track_color">#8CBAFF</color>
 </resources>

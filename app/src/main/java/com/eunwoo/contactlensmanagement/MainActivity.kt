@@ -1,7 +1,9 @@
 package com.eunwoo.contactlensmanagement
 
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
 import com.eunwoo.contactlensmanagement.fragment.LensManagementFragment
@@ -9,6 +11,7 @@ import com.eunwoo.contactlensmanagement.fragment.MapFragment
 import com.eunwoo.contactlensmanagement.fragment.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
 
@@ -30,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(view)
 
         Log.d(TAG, "MainActivity - onCreate() called")
-
         initBottomNavigationBar(binding)
     }
 
@@ -59,4 +61,5 @@ class MainActivity : AppCompatActivity() {
         // 초기 값 세팅
         binding.bnvMain.selectedItemId = R.id.lens_management_fragment_item
     }
+
 }

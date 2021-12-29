@@ -52,7 +52,7 @@ class LensRecordAdapter(val db: LensDatabase, var items: List<Lens>?)
             binding.textView3.setText(lens.initialDate)
             binding.textView4.setText(lens.expirationDate)
 
-
+            // 리사이클러뷰의 아이템 클릭시 아이템 수정 창이 뜨는 코드...
             itemView.setOnClickListener {
                 Log.d("LRA", "ClickINDEX : $index")
                 CoroutineScope(IO).launch {

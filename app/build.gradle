@@ -74,4 +74,8 @@ dependencies {
     def work_version = "2.7.1"
     // WorkManager
     implementation "androidx.work:work-runtime-ktx:$work_version"
+
+    // 카카오맵 의존성 추가
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation files('libs/libDaumMapAndroid.jar')
 }

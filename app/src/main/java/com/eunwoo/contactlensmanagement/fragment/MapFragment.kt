@@ -6,8 +6,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RelativeLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import com.eunwoo.contactlensmanagement.MainActivity
 import com.eunwoo.contactlensmanagement.R
+import com.eunwoo.contactlensmanagement.databinding.MapFragmentBinding
+import com.eunwoo.contactlensmanagement.viewmodel.MainViewModel
+import net.daum.mf.map.api.MapView
 
 class MapFragment: Fragment() {
     // 싱글톤
@@ -18,6 +24,9 @@ class MapFragment: Fragment() {
             return MapFragment()
         }
     }
+
+    lateinit var binding: MapFragmentBinding
+    lateinit var mapView: MapView
 
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,12 +47,16 @@ class MapFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         Log.d(TAG, "MapFragment - onCreateView() called")
 
-        val view = inflater.inflate(R.layout.map_fragment, container, false)
+        binding = MapFragmentBinding.inflate(inflater, container, false)
 
-        return view
+        // val view = inflater.inflate(R.layout.map_fragment, container, false)
+
+        mapView = MapView(activity)
+        binding.exploreMapView.addView(mapView)
+
+        return binding.root
         //return super.onCreateView(inflater, container, savedInstanceState)
     }
 }

@@ -1,12 +1,14 @@
 package com.eunwoo.contactlensmanagement.fragment
 
 import android.content.Context
+import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RelativeLayout
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModel
 import com.eunwoo.contactlensmanagement.MainActivity
@@ -26,7 +28,6 @@ class MapFragment: Fragment() {
     }
 
     lateinit var binding: MapFragmentBinding
-    lateinit var mapView: MapView
 
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +52,28 @@ class MapFragment: Fragment() {
 
         binding = MapFragmentBinding.inflate(inflater, container, false)
 
-        // val view = inflater.inflate(R.layout.map_fragment, container, false)
-
-        mapView = MapView(activity)
-        binding.exploreMapView.addView(mapView)
-
+        binding.Button.setOnClickListener {
+            if (checkLocationService()) {
+                startTracking()
+            }
+        }
         return binding.root
         //return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "onStart called")
+    }
+
+    // GPS가 켜져있는지 확인
+    private fun checkLocationService(): Boolean {
+        val locationManager = context?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+    }
+
+    // 위치추적 시작
+    private fun startTracking() {
+        binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
     }
 }

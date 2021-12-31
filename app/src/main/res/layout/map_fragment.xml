@@ -6,8 +6,12 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@android:color/white">
-    <RelativeLayout
-        android:id="@+id/explore_map_view"
+    <Button
+        android:id="@+id/Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <net.daum.mf.map.api.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </LinearLayout>

@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+//        setTheme(R.style.Theme_ContactLensManagement)
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -37,7 +38,6 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "MainActivity - onCreate() called")
         initBottomNavigationBar(binding)
-        checkPermission()
     }
 
     // 바텀네비바 초기
@@ -65,34 +65,5 @@ class MainActivity : AppCompatActivity() {
         }
         // 초기 값 세팅
         binding.bnvMain.selectedItemId = R.id.lens_management_fragment_item
-    }
-
-    // 권한 확
-    private fun checkPermission() {
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION)
-            != PackageManager.PERMISSION_GRANTED) {
-            var permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION)
-            ActivityCompat.requestPermissions(this, permissions, MY_PERMISSION_ACCESS_ALL)
-        }
-    }
-
-    // 권한 요청 결과 반환
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            MY_PERMISSION_ACCESS_ALL -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this@MainActivity, "위치권한이 허용되었습니다.", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@MainActivity, "위치권한을 거절하셨습니다. 관련 서비스를 제공 받으시려면 설정에 가셔서 위치권한을 허용해주세요.", Toast.LENGTH_LONG).show()
-                }
-                return
-            }
-        }
     }
 }

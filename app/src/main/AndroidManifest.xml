@@ -16,7 +16,7 @@
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="afa93b5e64564f9c2c432491517ab37a" />
+            android:value="${KAKAO_MAP_API_KEY}" />
 
 
         <activity android:name=".SplashActivity"

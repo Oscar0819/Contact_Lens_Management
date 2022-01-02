@@ -52,6 +52,8 @@ class MapFragment: Fragment() {
 
         binding = MapFragmentBinding.inflate(inflater, container, false)
 
+
+//        binding.mapView.setCurrentLocationEventListener()
         binding.Button.setOnClickListener {
             if (checkLocationService()) {
                 startTracking()
@@ -76,4 +78,6 @@ class MapFragment: Fragment() {
     private fun startTracking() {
         binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
     }
+
+
 }

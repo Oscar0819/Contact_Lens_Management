@@ -7,6 +7,7 @@ plugins {
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 def kakao_map_api_key = properties.getProperty('kakao_map_api_key')
+def naver_map_api_key = properties.getProperty('naver_map_api_key')
 
 android {
     compileSdkVersion 31
@@ -27,6 +28,8 @@ android {
         versionName "1.0"
 
         manifestPlaceholders = [KAKAO_MAP_API_KEY: kakao_map_api_key]
+        manifestPlaceholders = [NAVER_MAP_API_KEY: naver_map_api_key]
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -80,7 +83,7 @@ dependencies {
     // WorkManager
     implementation "androidx.work:work-runtime-ktx:$work_version"
 
-    // 카카오맵 의존성 추가
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation files('libs/libDaumMapAndroid.jar')
+    // 네이버 지도 SDK
+    implementation 'com.naver.maps:map-sdk:3.13.0'
+
 }

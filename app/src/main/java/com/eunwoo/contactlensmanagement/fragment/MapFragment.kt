@@ -1,26 +1,21 @@
 package com.eunwoo.contactlensmanagement.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RelativeLayout
-import androidx.core.content.ContextCompat.getSystemService
+import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModel
-import com.eunwoo.contactlensmanagement.MainActivity
-import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.databinding.MapFragmentBinding
-import com.eunwoo.contactlensmanagement.viewmodel.MainViewModel
-import net.daum.mf.map.api.MapView
 
 class MapFragment: Fragment() {
     // 싱글톤
     companion object {
-        const val TAG: String = "로그"
+        const val TAG: String = "MapFragment"
 
         fun newInstance(): MapFragment {
             return MapFragment()
@@ -28,6 +23,7 @@ class MapFragment: Fragment() {
     }
 
     lateinit var binding: MapFragmentBinding
+
 
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,14 +49,17 @@ class MapFragment: Fragment() {
         binding = MapFragmentBinding.inflate(inflater, container, false)
 
 
-//        binding.mapView.setCurrentLocationEventListener()
-        binding.Button.setOnClickListener {
-            if (checkLocationService()) {
-                startTracking()
-            }
-        }
         return binding.root
-        //return super.onCreateView(inflater, container, savedInstanceState)
+//------------------------------------------------------
+//        val v = inflater.inflate(R.layout.map_fragment, container, false)
+//
+//        mapView = MapView(activity)
+//        val mapViewContainer: ViewGroup = v.findViewById(R.id.kakaoMapView)
+//        mapViewContainer.addView(mapView)
+//
+//        startTracking()
+//
+//        return v
     }
 
     override fun onStart() {
@@ -76,8 +75,19 @@ class MapFragment: Fragment() {
 
     // 위치추적 시작
     private fun startTracking() {
-        binding.mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithoutHeading
+        Log.d(TAG, "startTracking")
+        if (checkLocationService()) {
+            onLog("checkLocationService : ${checkLocationService()}")
+
+
+        } else {
+                // GPS가 꺼져있을 경우
+                Toast.makeText(context, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
+        }
     }
 
+    fun onLog(s: String) {
+        Log.d(TAG, s)
+    }
 
 }

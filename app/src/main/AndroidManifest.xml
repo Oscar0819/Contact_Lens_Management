@@ -15,14 +15,15 @@
         android:theme="@style/Theme.ContactLensManagement">
 
         <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="${KAKAO_MAP_API_KEY}" />
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="${NAVER_MAP_API_KEY}" />
 
-
-        <activity android:name=".SplashActivity"
+        <activity
+            android:name=".SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,8 +32,7 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.ContactLensManagement">
-        </activity>
+            android:theme="@style/Theme.ContactLensManagement"></activity>
 
         <receiver
             android:name=".AlarmReceiver"

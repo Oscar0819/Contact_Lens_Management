@@ -22,8 +22,9 @@ android {
     }
     defaultConfig {
         applicationId "com.eunwoo.contactlensmanagement"
-        minSdkVersion 16
+        minSdkVersion 21
         targetSdkVersion 30
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
 
@@ -86,4 +87,9 @@ dependencies {
     // 네이버 지도 SDK
     implementation 'com.naver.maps:map-sdk:3.13.0'
 
+    // FusedLocationSource
+    implementation 'com.google.android.gms:play-services-location:16.0.0'
+
+//    // minSdkVersion이 20이하로 설정되어 있어서 멀티덱스 라이브러리를 통 64K 제한을 피함
+//    implementation "androidx.multidex:multidex:2.0.1"
 }

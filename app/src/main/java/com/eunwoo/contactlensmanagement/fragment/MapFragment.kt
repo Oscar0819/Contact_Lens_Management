@@ -9,13 +9,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.Nullable
 import androidx.fragment.app.Fragment
+import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.databinding.MapFragmentBinding
+import com.naver.maps.map.LocationTrackingMode
+import com.naver.maps.map.MapView
+import com.naver.maps.map.NaverMap
+import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.map.util.FusedLocationSource
 
-class MapFragment: Fragment() {
+class MapFragment: Fragment(), OnMapReadyCallback{
     // 싱글톤
     companion object {
         const val TAG: String = "MapFragment"
+
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
         fun newInstance(): MapFragment {
             return MapFragment()
@@ -23,7 +32,10 @@ class MapFragment: Fragment() {
     }
 
     lateinit var binding: MapFragmentBinding
+    private lateinit var mapView: MapView
 
+    private lateinit var locationSource: FusedLocationSource
+    private lateinit var naverMap: NaverMap
 
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,23 +60,51 @@ class MapFragment: Fragment() {
 
         binding = MapFragmentBinding.inflate(inflater, container, false)
 
-
         return binding.root
-//------------------------------------------------------
-//        val v = inflater.inflate(R.layout.map_fragment, container, false)
-//
-//        mapView = MapView(activity)
-//        val mapViewContainer: ViewGroup = v.findViewById(R.id.kakaoMapView)
-//        mapViewContainer.addView(mapView)
-//
-//        startTracking()
-//
-//        return v
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        mapView = binding.mapView
+        mapView.onCreate(savedInstanceState)
+        mapView.getMapAsync(this)
+
+        locationSource = FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE)
     }
 
     override fun onStart() {
         super.onStart()
-        Log.d(TAG, "onStart called")
+        mapView.onStart()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mapView.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mapView.onPause()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        mapView.onSaveInstanceState(outState)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onStop()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        mapView.onDestroy()
+    }
+
+    override fun onLowMemory() {
+        super.onLowMemory()
+        mapView.onLowMemory()
     }
 
     // GPS가 켜져있는지 확인
@@ -73,21 +113,38 @@ class MapFragment: Fragment() {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
-    // 위치추적 시작
+    // 위치 추적 시작
     private fun startTracking() {
         Log.d(TAG, "startTracking")
         if (checkLocationService()) {
-            onLog("checkLocationService : ${checkLocationService()}")
+            // GPS가 켜져있을경우 트래킹 모드 설정
+            Log.d(TAG, "checkLocationService : ${checkLocationService()}")
+            naverMap.locationSource = locationSource
+            naverMap.locationTrackingMode = LocationTrackingMode.Follow
 
+            // naverMap ui settings
+            val uiSettings = naverMap.uiSettings
+            uiSettings.isZoomControlEnabled = true
+            uiSettings.isLocationButtonEnabled = true
+
+            // 오버레이 setting
+            val locationOverlay = naverMap.locationOverlay
+            locationOverlay.isVisible = true
 
         } else {
-                // GPS가 꺼져있을 경우
-                Toast.makeText(context, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
+            // GPS가 꺼져있을경우 트래킹 모드 설정 및 토스트 메시지
+            naverMap.locationTrackingMode = LocationTrackingMode.None
+            Toast.makeText(context, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
         }
     }
 
-    fun onLog(s: String) {
-        Log.d(TAG, s)
+    override fun onMapReady(p0: NaverMap) {
+        Log.d(TAG, "onMapReady")
+        naverMap = p0
+//        val locationOverlay = naverMap.locationOverlay
+//        locationOverlay.isVisible = true
+
+        startTracking()
     }
 
 }

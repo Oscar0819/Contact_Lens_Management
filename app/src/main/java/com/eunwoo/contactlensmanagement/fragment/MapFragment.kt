@@ -3,6 +3,7 @@ package com.eunwoo.contactlensmanagement.fragment
 import android.content.Context
 import android.content.Intent
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,14 +11,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.Nullable
+
 import androidx.fragment.app.Fragment
+import com.eunwoo.contactlensmanagement.BuildConfig
+
 import com.eunwoo.contactlensmanagement.R
+import com.eunwoo.contactlensmanagement.ResultSearchKeyword
 import com.eunwoo.contactlensmanagement.databinding.MapFragmentBinding
+import com.eunwoo.contactlensmanagement.restapi.KakaoAPI
 import com.naver.maps.map.LocationTrackingMode
 import com.naver.maps.map.MapView
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.util.FusedLocationSource
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MapFragment: Fragment(), OnMapReadyCallback{
     // 싱글톤
@@ -25,6 +36,9 @@ class MapFragment: Fragment(), OnMapReadyCallback{
         const val TAG: String = "MapFragment"
 
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
+
+        private const val BASE_URL = "https://dapi.kakao.com/"
+        private const val API_KEY = BuildConfig.KAKAO_REST_API_KEY
 
         fun newInstance(): MapFragment {
             return MapFragment()
@@ -138,6 +152,33 @@ class MapFragment: Fragment(), OnMapReadyCallback{
         }
     }
 
+    // 키워드 검색 함수
+    private fun searchKeyword(keyword: String) {
+        val retrofit = Retrofit.Builder()   // Retrofit 구성
+            .baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val api = retrofit.create(KakaoAPI::class.java)   // 통신 인터페이스를 객체로 생성
+        val call = api.getSearchKeyword(API_KEY, keyword)   // 검색 조건 입력
+
+        // API 서버에 요청
+        call.enqueue(object: Callback<ResultSearchKeyword> {
+            override fun onResponse(
+                call: Call<ResultSearchKeyword>,
+                response: Response<ResultSearchKeyword>
+            ) {
+                // 통신 성공 (검색 결과는 response.body()에 담겨있음)
+                Log.d("Test", "Raw: ${response.raw()}")
+                Log.d("Test", "Body: ${response.body()}")
+            }
+
+            override fun onFailure(call: Call<ResultSearchKeyword>, t: Throwable) {
+                // 통신 실패
+                Log.w("MainActivity", "통신 실패: ${t.message}")
+            }
+        })
+    }
+
     override fun onMapReady(p0: NaverMap) {
         Log.d(TAG, "onMapReady")
         naverMap = p0
@@ -146,5 +187,4 @@ class MapFragment: Fragment(), OnMapReadyCallback{
 
         startTracking()
     }
-
 }

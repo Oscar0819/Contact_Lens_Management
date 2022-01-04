@@ -6,7 +6,7 @@ plugins {
 
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def kakao_map_api_key = properties.getProperty('kakao_map_api_key')
+def kakao_rest_api_key = properties.getProperty('kakao_rest_api_key')
 def naver_map_api_key = properties.getProperty('naver_map_api_key')
 
 android {
@@ -28,7 +28,7 @@ android {
         versionCode 1
         versionName "1.0"
 
-        manifestPlaceholders = [KAKAO_MAP_API_KEY: kakao_map_api_key]
+        buildConfigField "String", 'KAKAO_REST_API_KEY', kakao_rest_api_key
         manifestPlaceholders = [NAVER_MAP_API_KEY: naver_map_api_key]
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -92,4 +92,7 @@ dependencies {
 
 //    // minSdkVersion이 20이하로 설정되어 있어서 멀티덱스 라이브러리를 통 64K 제한을 피함
 //    implementation "androidx.multidex:multidex:2.0.1"
+
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
 }

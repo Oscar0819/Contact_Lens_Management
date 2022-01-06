@@ -1,36 +1,39 @@
 package com.eunwoo.contactlensmanagement.fragment
 
 import android.content.Context
-import android.content.Intent
+import android.graphics.PointF
 import android.location.LocationManager
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.Nullable
 
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.eunwoo.contactlensmanagement.BuildConfig
 
-import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.ResultSearchKeyword
 import com.eunwoo.contactlensmanagement.databinding.MapFragmentBinding
 import com.eunwoo.contactlensmanagement.restapi.KakaoAPI
-import com.naver.maps.map.LocationTrackingMode
-import com.naver.maps.map.MapView
-import com.naver.maps.map.NaverMap
-import com.naver.maps.map.OnMapReadyCallback
+import com.naver.maps.geometry.LatLng
+import com.naver.maps.map.*
+import com.naver.maps.map.overlay.InfoWindow
+import com.naver.maps.map.overlay.Marker
+import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class MapFragment: Fragment(), OnMapReadyCallback{
+class MapFragment: Fragment(), OnMapReadyCallback {
     // 싱글톤
     companion object {
         const val TAG: String = "MapFragment"
@@ -38,7 +41,7 @@ class MapFragment: Fragment(), OnMapReadyCallback{
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1000
 
         private const val BASE_URL = "https://dapi.kakao.com/"
-        private const val API_KEY = BuildConfig.KAKAO_REST_API_KEY
+        private const val REST_API_KEY = BuildConfig.KAKAO_REST_API_KEY
 
         fun newInstance(): MapFragment {
             return MapFragment()
@@ -50,6 +53,10 @@ class MapFragment: Fragment(), OnMapReadyCallback{
 
     private lateinit var locationSource: FusedLocationSource
     private lateinit var naverMap: NaverMap
+
+    private var initCnt: Int = 0
+    val markers = mutableListOf<Marker>()
+    val infoWindow = InfoWindow()
 
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -145,23 +152,37 @@ class MapFragment: Fragment(), OnMapReadyCallback{
             val locationOverlay = naverMap.locationOverlay
             locationOverlay.isVisible = true
 
+            // GPS가 제대로된 위치를 탐색 했을 때 API를 호출아
+            naverMap.addOnLocationChangeListener {
+                if (initCnt == 0) {
+                    initCnt++
+                    val x = it.longitude
+                    val y = it.latitude
+                    Log.d(TAG, "x : ${x}")
+                    Log.d(TAG, "y : ${y}")
+                    if (x != null && y != null) {
+                        searchKeyword("렌즈", x, y, 5000)
+                    }
+                }
+            }
+
         } else {
             // GPS가 꺼져있을경우 트래킹 모드 설정 및 토스트 메시지
             naverMap.locationTrackingMode = LocationTrackingMode.None
-            Toast.makeText(context, "GPS를 켜주세요", Toast.LENGTH_SHORT).show()
+            shortToastMassege("GPS를 켜주세요")
         }
     }
 
     // 키워드 검색 함수
-    private fun searchKeyword(keyword: String) {
+    private fun searchKeyword(keyword: String, x: Double, y: Double, radius: Long) {
         val retrofit = Retrofit.Builder()   // Retrofit 구성
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val api = retrofit.create(KakaoAPI::class.java)   // 통신 인터페이스를 객체로 생성
-        val call = api.getSearchKeyword(API_KEY, keyword)   // 검색 조건 입력
+        val call = api.getSearchKeyword("KakaoAK " + REST_API_KEY, keyword, x, y, radius)   // 검색 조건 입력
 
-        // API 서버에 요청
+        // API 서버에 요청 (비동기로 실행됨...)
         call.enqueue(object: Callback<ResultSearchKeyword> {
             override fun onResponse(
                 call: Call<ResultSearchKeyword>,
@@ -170,13 +191,70 @@ class MapFragment: Fragment(), OnMapReadyCallback{
                 // 통신 성공 (검색 결과는 response.body()에 담겨있음)
                 Log.d("Test", "Raw: ${response.raw()}")
                 Log.d("Test", "Body: ${response.body()}")
+                shortToastMassege("통신 성공!")
+                addItemsAndMarkers(response.body())
             }
 
             override fun onFailure(call: Call<ResultSearchKeyword>, t: Throwable) {
                 // 통신 실패
                 Log.w("MainActivity", "통신 실패: ${t.message}")
+                longToastMassege("통신에 실패했습니다.")
             }
         })
+    }
+
+    // 검색 결과 처리 함수
+    private fun addItemsAndMarkers(searchResult: ResultSearchKeyword?) {
+        // 데이터가 null이 아닌 경우에만 작동..
+        if (!searchResult?.documents.isNullOrEmpty()) {
+            // 검색 결과 있음
+            markers.clear()
+            // 마커 생성 후 저장
+            for (document in searchResult!!.documents) {
+                val marker = Marker()
+                marker.position = LatLng(document.y.toDouble(), document.x.toDouble())
+                marker.tag = document.address_name + "\n" +
+                        document.place_name + "\n" +
+                        document.phone
+                marker.onClickListener = Overlay.OnClickListener {
+                    // 마커 리스너
+                    shortToastMassege("마커 클릭!")
+
+                    val marker = it as Marker
+
+                    val mapBottomDialogFragment: MapBottomDialogFragment = MapBottomDialogFragment()
+                    mapBottomDialogFragment.show(childFragmentManager, mapBottomDialogFragment.tag)
+
+                    if (marker.infoWindow == null) {
+                        // 현재 마커에 정보 창이 열려있지 않을 경우 엶
+                        infoWindow.open(marker)
+                    } else {
+                        // 이미 현재 마커에 정보 창이 열려있을 경우 닫음
+                        infoWindow.close()
+                    }
+
+                    true
+                }
+
+                markers.add(marker)
+            }
+
+            markers.forEach {
+                it.map = naverMap
+            }
+
+        } else {
+            // 검색 결과 없음
+            shortToastMassege("검색 결과가 없습니다.")
+        }
+    }
+
+    private fun shortToastMassege(s: String) {
+        Toast.makeText(context, s, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun longToastMassege(s: String) {
+        Toast.makeText(context, s, Toast.LENGTH_LONG).show()
     }
 
     override fun onMapReady(p0: NaverMap) {
@@ -184,6 +262,19 @@ class MapFragment: Fragment(), OnMapReadyCallback{
         naverMap = p0
 //        val locationOverlay = naverMap.locationOverlay
 //        locationOverlay.isVisible = true
+
+        infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
+            override fun getText(infoWindow: InfoWindow): CharSequence {
+                // 정보 창이 열린 마커의 tag를 텍스트로 노출하도록 반환
+                return infoWindow.marker?.tag as CharSequence? ?: ""
+            }
+        }
+
+        // 지도를 클릭하면 정보 창을 닫음
+        naverMap.setOnMapClickListener { pointF, latLng ->
+            shortToastMassege("지도 클릭 ")
+            infoWindow.close()
+        }
 
         startTracking()
     }

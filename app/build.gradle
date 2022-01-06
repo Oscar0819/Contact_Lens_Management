@@ -73,7 +73,7 @@ dependencies {
     // Annotation processor
     kapt "androidx.lifecycle:lifecycle-compiler:2.2.0"
     // UI
-    implementation "com.google.android.material:material:1.1.0"
+    implementation "com.google.android.material:material:1.4.0"
     // Testng
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
 

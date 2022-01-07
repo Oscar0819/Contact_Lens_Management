@@ -60,6 +60,8 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     val markers = mutableListOf<Marker>()
     val infoWindow = InfoWindow()
 
+    private var mapPersistBottomFragment: MapPersistBottomFragment? = null
+
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -223,6 +225,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
                     shortToastMassege("마커 클릭!")
 
                     val marker = it as Marker
+
 
 
                     if (marker.infoWindow == null) {

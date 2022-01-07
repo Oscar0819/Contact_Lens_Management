@@ -10,9 +10,11 @@ import androidx.core.app.ActivityCompat
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
 import com.eunwoo.contactlensmanagement.fragment.LensManagementFragment
 import com.eunwoo.contactlensmanagement.fragment.MapFragment
+import com.eunwoo.contactlensmanagement.fragment.MapPersistBottomFragment
 import com.eunwoo.contactlensmanagement.fragment.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
+import kr.co.prnd.persistbottomsheetfragment.PersistBottomSheetFragment
 import java.security.MessageDigest
 
 class MainActivity : AppCompatActivity() {
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var  lensManagementFragment: LensManagementFragment
     private lateinit var  mapFragment: MapFragment
     private lateinit var  profileFragment: ProfileFragment
+    private var mapPersistBottomFragment: MapPersistBottomFragment? = null
 
     companion object {
         const val TAG: String = "로그"
@@ -56,8 +59,9 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.profile_fragment_item -> {
                     Log.d(TAG, "MainActivity - 프로필 버튼 클릭")
-                    profileFragment = ProfileFragment.newInstance()
-                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()
+//                    profileFragment = ProfileFragment.newInstance()
+//                    supportFragmentManager.beginTransaction().replace(R.id.fl_container, profileFragment).commit()
+                    mapPersistBottomFragment = MapPersistBottomFragment.show(supportFragmentManager, R.id.view_bottom_sheet)
                 }
 
             }

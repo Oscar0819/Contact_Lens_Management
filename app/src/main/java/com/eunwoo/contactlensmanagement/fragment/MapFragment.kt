@@ -9,10 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.DialogFragment
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.eunwoo.contactlensmanagement.BuildConfig
+import com.eunwoo.contactlensmanagement.R
 
 import com.eunwoo.contactlensmanagement.ResultSearchKeyword
 import com.eunwoo.contactlensmanagement.databinding.MapFragmentBinding
@@ -222,8 +224,6 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
                     val marker = it as Marker
 
-                    val mapBottomDialogFragment: MapBottomDialogFragment = MapBottomDialogFragment()
-                    mapBottomDialogFragment.show(childFragmentManager, mapBottomDialogFragment.tag)
 
                     if (marker.infoWindow == null) {
                         // 현재 마커에 정보 창이 열려있지 않을 경우 엶

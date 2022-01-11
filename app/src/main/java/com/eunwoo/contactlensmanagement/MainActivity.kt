@@ -1,22 +1,19 @@
 package com.eunwoo.contactlensmanagement
 
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
+import android.view.View
+import androidx.activity.viewModels
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
+import com.eunwoo.contactlensmanagement.enums.PageType
 import com.eunwoo.contactlensmanagement.fragment.LensManagementFragment
 import com.eunwoo.contactlensmanagement.fragment.MapFragment
 import com.eunwoo.contactlensmanagement.fragment.MapPersistBottomFragment
 import com.eunwoo.contactlensmanagement.fragment.ProfileFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.navigation.NavigationView
-import kr.co.prnd.persistbottomsheetfragment.PersistBottomSheetFragment
-import java.security.MessageDigest
+import com.eunwoo.contactlensmanagement.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,6 +25,9 @@ class MainActivity : AppCompatActivity() {
     private var mapFragment: MapFragment? = null
     private var profileFragment: ProfileFragment? = null
     private var mapPersistBottomFragment: MapPersistBottomFragment? = null
+    private var bottomFragmentCnt = 0
+
+    private val viewModel: MainViewModel by viewModels()
 
     companion object {
         const val TAG: String = "로그"
@@ -42,10 +42,13 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+//        binding.vm = viewModel
+
         fragmentManager = supportFragmentManager
         // 시작 프래그먼트는 lensManagementFragment
         lensManagementFragment = LensManagementFragment.newInstance()
-        fragmentManager.beginTransaction().replace(R.id.fl_container, lensManagementFragment!!).commit()
+        fragmentManager.beginTransaction().replace(R.id.fl_container, lensManagementFragment!!)
+            .commit()
 
         Log.d(TAG, "MainActivity - onCreate() called")
         initBottomNavigationBar()
@@ -53,45 +56,87 @@ class MainActivity : AppCompatActivity() {
 
     // 바텀네비바 초기
     private fun initBottomNavigationBar() {
-        // 시작 프래그먼트는 lensManagementFragment
-        binding.bnvMain.selectedItemId = R.id.lens_management_fragment_item
+        binding.bnvMain.selectedItemId =
+            R.id.lens_management_fragment_item // 바텀 네비의 버튼 clicked 초기화..
         binding.bnvMain.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.map_fragment_item -> {
                     Log.d(TAG, "MainActivity - 맵 버튼 클릭")
                     if (mapFragment == null) {
                         mapFragment = MapFragment.newInstance()
-                        fragmentManager.beginTransaction().add(R.id.fl_container, mapFragment!!).commit()
+                        fragmentManager.beginTransaction().add(R.id.fl_container, mapFragment!!)
+                            .commit()
                     }
-                    if (lensManagementFragment != null) fragmentManager.beginTransaction().hide(lensManagementFragment!!).commit()
-                    if (mapFragment != null) fragmentManager.beginTransaction().show(mapFragment!!).commit()
-                    if (profileFragment != null) fragmentManager.beginTransaction().hide(profileFragment!!).commit()
+                    if (lensManagementFragment != null) fragmentManager.beginTransaction()
+                        .hide(lensManagementFragment!!).commit()
+                    if (mapFragment != null) fragmentManager.beginTransaction().show(mapFragment!!)
+                        .commit()
+                    if (profileFragment != null) fragmentManager.beginTransaction()
+                        .hide(profileFragment!!).commit()
                 }
                 R.id.lens_management_fragment_item -> {
                     Log.d(TAG, "MainActivity - 렌즈 관리 버튼 클릭")
                     if (lensManagementFragment == null) {
                         lensManagementFragment = LensManagementFragment.newInstance()
-                        fragmentManager.beginTransaction().add(R.id.fl_container, lensManagementFragment!!).commit()
+                        fragmentManager.beginTransaction()
+                            .add(R.id.fl_container, lensManagementFragment!!).commit()
                     }
 
-                    if (lensManagementFragment != null) fragmentManager.beginTransaction().show(lensManagementFragment!!).commit()
-                    if (mapFragment != null) fragmentManager.beginTransaction().hide(mapFragment!!).commit()
-                    if (profileFragment != null) fragmentManager.beginTransaction().hide(profileFragment!!).commit()
+                    if (lensManagementFragment != null) fragmentManager.beginTransaction()
+                        .show(lensManagementFragment!!).commit()
+                    if (mapFragment != null) fragmentManager.beginTransaction().hide(mapFragment!!)
+                        .commit()
+                    if (profileFragment != null) fragmentManager.beginTransaction()
+                        .hide(profileFragment!!).commit()
                 }
                 R.id.profile_fragment_item -> {
                     Log.d(TAG, "MainActivity - 프로필 버튼 클릭")
                     if (profileFragment == null) {
                         profileFragment = ProfileFragment.newInstance()
-                        fragmentManager.beginTransaction().add(R.id.fl_container, profileFragment!!).commit()
+                        fragmentManager.beginTransaction().add(R.id.fl_container, profileFragment!!)
+                            .commit()
                     }
 
-                    if (lensManagementFragment != null) fragmentManager.beginTransaction().hide(lensManagementFragment!!).commit()
-                    if (mapFragment != null) fragmentManager.beginTransaction().hide(mapFragment!!).commit()
-                    if (profileFragment != null) fragmentManager.beginTransaction().show(profileFragment!!).commit()
+                    if (lensManagementFragment != null) fragmentManager.beginTransaction()
+                        .hide(lensManagementFragment!!).commit()
+                    if (mapFragment != null) fragmentManager.beginTransaction().hide(mapFragment!!)
+                        .commit()
+                    if (profileFragment != null) fragmentManager.beginTransaction()
+                        .show(profileFragment!!).commit()
                 }
-
             }
             true
+        }
+    }
+
+
+    fun showBottomFragment(place: Place) {
+        if (bottomFragmentCnt == 0) {
+            Log.d(TAG, "Show")
+            bottomFragmentCnt++
+            mapPersistBottomFragment = MapPersistBottomFragment.show(fragmentManager, R.id.view_bottom_sheet)
+        } else {
+            Log.d(TAG, "Visible")
+            mapPersistBottomFragment!!.view?.visibility = View.VISIBLE
+            binding.viewBottomSheet.visibility = View.VISIBLE
+        }
+    }
+
+    fun hideBottomFragment() {
+//      if  (mapPersistBottomFragment?.isVisible == true)
+        if (mapPersistBottomFragment?.isVisible == true) {
+            Log.d(TAG, "inVisible")
+            mapPersistBottomFragment!!.view?.visibility = View.INVISIBLE
+            binding.viewBottomSheet.visibility = View.INVISIBLE
+        }
+    }
+
+    override fun onBackPressed() {
+        // handleBackKeyEvent : 백스택을 조회하여 있을 경우 childFragmentManager.popBackStackImmediate() 실행..
+        if (mapPersistBottomFragment?.handleBackKeyEvent() == true) {
+            // no-op
+        } else {
+            super.onBackPressed()
         }
     }
 

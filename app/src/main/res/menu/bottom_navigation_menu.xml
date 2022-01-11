@@ -4,15 +4,15 @@
         android:id="@+id/map_fragment_item"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_location_on_24"
-        android:title="@string/bottom_navigation_label1"/>
+        android:title="@string/main_tab_title_page_1"/>
     <item
         android:id="@+id/lens_management_fragment_item"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_panorama_fish_eye_24"
-        android:title="@string/bottom_navigation_label2"/>
+        android:title="@string/main_tab_title_page_2"/>
     <item
         android:id="@+id/profile_fragment_item"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_person_24"
-        android:title="@string/bottom_navigation_label3"/>
+        android:title="@string/main_tab_title_page_3"/>
 </menu>

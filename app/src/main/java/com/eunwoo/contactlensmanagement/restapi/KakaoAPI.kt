@@ -1,5 +1,6 @@
 package com.eunwoo.contactlensmanagement.restapi
 
+import com.eunwoo.contactlensmanagement.BuildConfig
 import com.eunwoo.contactlensmanagement.ResultSearchKeyword
 import retrofit2.Call
 import retrofit2.http.GET
@@ -20,4 +21,12 @@ interface KakaoAPI {
 
     ): Call<ResultSearchKeyword>    // 받아온 정보가 ResultSearchKeyword 클래스의 구조로 담김
 
+//    companion object {
+//        private const val BASE_URL = "https://dapi.kakao.com/"
+//        private const val REST_API_KEY = BuildConfig.KAKAO_REST_API_KEY
+//    }
+//
+//    fun create(): KakaoAPI {
+//
+//    }
 }

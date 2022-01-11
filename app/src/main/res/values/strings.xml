@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Contact Lens Management</string>
-    <string name="bottom_navigation_label1">first</string>
-    <string name="bottom_navigation_label2">second</string>
-    <string name="bottom_navigation_label3">third</string>
+    <string name="main_tab_title_page_1">Map</string>
+    <string name="main_tab_title_page_2">Management</string>
+    <string name="main_tab_title_page_3">Profile</string>
 
 </resources>

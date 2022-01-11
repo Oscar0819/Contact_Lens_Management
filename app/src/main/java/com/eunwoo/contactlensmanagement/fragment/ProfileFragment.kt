@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebViewClient
 import androidx.fragment.app.Fragment
 import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.databinding.LensManagementFragmentBinding
@@ -46,9 +47,13 @@ class ProfileFragment: Fragment() {
         Log.d(TAG, "ProfileFragment - onCreateView() called")
 
         binding = ProfileFragmentBinding.inflate(inflater, container, false)
-        binding.textView.text = "프로필 뷰바인딩 완료"
 
         return binding.root
         //return super.onCreateView(inflater, container, savedInstanceState)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
     }
 }

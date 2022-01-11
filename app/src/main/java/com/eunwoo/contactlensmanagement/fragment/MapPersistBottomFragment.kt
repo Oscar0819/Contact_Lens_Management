@@ -2,6 +2,7 @@ package com.eunwoo.contactlensmanagement.fragment
 
 import android.os.Bundle
 import android.view.View
+import android.webkit.WebViewClient
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import com.eunwoo.contactlensmanagement.R
@@ -19,6 +20,7 @@ class MapPersistBottomFragment :
         collapseBinding.viewSelect.setOnClickListener {
             expand()
         }
+
     }
     companion object {
         private val TAG = MapPersistBottomFragment::class.simpleName
@@ -32,7 +34,9 @@ class MapPersistBottomFragment :
                         .replace(containerViewId, this, TAG)
                         .commitAllowingStateLoss()
                 }
+
     }
+
 
 
 }

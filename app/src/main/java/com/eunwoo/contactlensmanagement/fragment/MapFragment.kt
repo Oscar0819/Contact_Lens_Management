@@ -9,16 +9,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.*
 
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.eunwoo.contactlensmanagement.BuildConfig
+import com.eunwoo.contactlensmanagement.MainActivity
 import com.eunwoo.contactlensmanagement.R
 
 import com.eunwoo.contactlensmanagement.ResultSearchKeyword
 import com.eunwoo.contactlensmanagement.databinding.MapFragmentBinding
 import com.eunwoo.contactlensmanagement.restapi.KakaoAPI
+import com.eunwoo.contactlensmanagement.viewmodel.MainViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
 import com.naver.maps.map.overlay.InfoWindow
@@ -48,6 +50,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         fun newInstance(): MapFragment {
             return MapFragment()
         }
+
     }
 
     lateinit var binding: MapFragmentBinding
@@ -61,6 +64,12 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     val infoWindow = InfoWindow()
 
     private var mapPersistBottomFragment: MapPersistBottomFragment? = null
+
+    private val viewModel: MainViewModel by activityViewModels()
+
+    val mainActivity: MainActivity by lazy {
+        (activity as MainActivity)
+    }
 
     // 메모리 올라갔을 때
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -90,6 +99,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         mapView = binding.mapView
         mapView.onCreate(savedInstanceState)
         mapView.getMapAsync(this)
@@ -156,7 +166,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
             val locationOverlay = naverMap.locationOverlay
             locationOverlay.isVisible = true
 
-            // GPS가 제대로된 위치를 탐색 했을 때 API를 호출아
+            // GPS가 제대로된 위치를 탐색 했을 때 API를 호출
             naverMap.addOnLocationChangeListener {
                 if (initCnt == 0) {
                     initCnt++
@@ -226,7 +236,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
                     val marker = it as Marker
 
-
+                    mainActivity.showBottomFragment(document)
 
                     if (marker.infoWindow == null) {
                         // 현재 마커에 정보 창이 열려있지 않을 경우 엶
@@ -277,6 +287,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
         naverMap.setOnMapClickListener { pointF, latLng ->
             shortToastMassege("지도 클릭 ")
             infoWindow.close()
+            mainActivity.hideBottomFragment()
         }
 
         startTracking()

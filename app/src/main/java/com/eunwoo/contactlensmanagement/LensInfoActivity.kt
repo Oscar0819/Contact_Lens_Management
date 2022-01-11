@@ -74,7 +74,7 @@ class LensInfoActivity : AppCompatActivity() {
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.lens_info_toolbar_menu, menu)
         // 목적에 따른 텍스트 설정
         if (lensInfoViewModel.code == 0) {

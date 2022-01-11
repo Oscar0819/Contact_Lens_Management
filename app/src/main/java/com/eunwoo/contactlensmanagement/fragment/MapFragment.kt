@@ -285,7 +285,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
         // 지도를 클릭하면 정보 창을 닫음
         naverMap.setOnMapClickListener { pointF, latLng ->
-            shortToastMassege("지도 클릭 ")
+
             infoWindow.close()
             mainActivity.hideBottomFragment()
         }

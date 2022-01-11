@@ -1,8 +1,11 @@
 package com.eunwoo.contactlensmanagement.viewmodel
 
+import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.eunwoo.contactlensmanagement.Place
 import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.enums.PageType
 import java.lang.IllegalArgumentException
@@ -20,31 +23,60 @@ class MainViewModel: ViewModel(){
         MutableLiveData<Int>()
     }
 
+    private val _id:  MutableLiveData<String> by lazy {
+        MutableLiveData<String>()
+    }
+    val id: LiveData<String>
+        get() = _id
+
     private val _placeName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    val placeName: LiveData<String> = _placeName
+    val placeName: LiveData<String>
+        get() = _placeName
 
     private val _addressName: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    val addressName: LiveData<String> = _addressName
+    val addressName: LiveData<String>
+        get() = _addressName
 
     private val _phone: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    val phone: LiveData<String> = _phone
+    val phone: LiveData<String>
+        get() = _phone
 
-    private val _shopURL: MutableLiveData<String> by lazy {
+    private val _distance: MutableLiveData<String> by lazy {
         MutableLiveData<String>()
     }
-    val shopURL: LiveData<String> = _shopURL
+    val distance: LiveData<String>
+        get() = _distance
 
     companion object {
         const val TAG: String = "MainViewModel"
     }
     // Rest of the ViewModel...
 
+    fun setPlaceData(place: Place) {
+        var phoneCheck: String = place.phone
+        var distanceMeter: String = place.distance
+        if (phoneCheck == "") {
+            phoneCheck = "연락처가 등록되지 않았습니다."
+        }
+
+        if (distanceMeter.toInt() >= 1000) {
+            distanceMeter = (distanceMeter.toInt() / 1000).toString() + "km"
+
+        } else {
+            distanceMeter += "m"
+        }
+        _placeName.value = place.place_name
+        _addressName.value = place.address_name
+        _phone.value = phoneCheck
+        _distance.value = distanceMeter
+        _id.value = place.id
+    }
 
 
 }

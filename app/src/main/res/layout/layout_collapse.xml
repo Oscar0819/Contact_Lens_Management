@@ -21,12 +21,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/col_place_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="이노티안경 창원봉림점"
+            android:text="@{vm.placeName}"
             android:textColor="@color/blue"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -35,30 +35,30 @@
         <!--            android:text="@{vm.placeName}"-->
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/col_address_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
-            android:text="경남 창원시 의창구 봉림동 713-3"
+            android:text="@{vm.addressName}"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintTop_toBottomOf="@+id/col_place_name" />
         <!--            android:text="@{vm.addressName}"-->
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/col_distance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="16dp"
-            android:text="3km"
+            android:text="@{vm.distance}"
             android:textColor="@color/black"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            app:layout_constraintTop_toBottomOf="@+id/col_address_name" />
         <!--            android:text="@{vm.distance}"-->
 
 

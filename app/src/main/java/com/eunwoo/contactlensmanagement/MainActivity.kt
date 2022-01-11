@@ -7,6 +7,7 @@ import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Observer
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
 import com.eunwoo.contactlensmanagement.enums.PageType
 import com.eunwoo.contactlensmanagement.fragment.LensManagementFragment
@@ -42,8 +43,6 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-//        binding.vm = viewModel
-
         fragmentManager = supportFragmentManager
         // 시작 프래그먼트는 lensManagementFragment
         lensManagementFragment = LensManagementFragment.newInstance()
@@ -73,6 +72,7 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                     if (profileFragment != null) fragmentManager.beginTransaction()
                         .hide(profileFragment!!).commit()
+                    hideBottomFragment()
                 }
                 R.id.lens_management_fragment_item -> {
                     Log.d(TAG, "MainActivity - 렌즈 관리 버튼 클릭")
@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                     if (profileFragment != null) fragmentManager.beginTransaction()
                         .hide(profileFragment!!).commit()
+                    hideBottomFragment()
                 }
                 R.id.profile_fragment_item -> {
                     Log.d(TAG, "MainActivity - 프로필 버튼 클릭")
@@ -103,6 +104,7 @@ class MainActivity : AppCompatActivity() {
                         .commit()
                     if (profileFragment != null) fragmentManager.beginTransaction()
                         .show(profileFragment!!).commit()
+                    hideBottomFragment()
                 }
             }
             true
@@ -111,6 +113,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun showBottomFragment(place: Place) {
+
         if (bottomFragmentCnt == 0) {
             Log.d(TAG, "Show")
             bottomFragmentCnt++
@@ -120,6 +123,7 @@ class MainActivity : AppCompatActivity() {
             mapPersistBottomFragment!!.view?.visibility = View.VISIBLE
             binding.viewBottomSheet.visibility = View.VISIBLE
         }
+        viewModel.setPlaceData(place)
     }
 
     fun hideBottomFragment() {

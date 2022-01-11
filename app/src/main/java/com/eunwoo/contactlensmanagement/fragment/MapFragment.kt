@@ -23,7 +23,7 @@ import com.eunwoo.contactlensmanagement.restapi.KakaoAPI
 import com.eunwoo.contactlensmanagement.viewmodel.MainViewModel
 import com.naver.maps.geometry.LatLng
 import com.naver.maps.map.*
-import com.naver.maps.map.overlay.InfoWindow
+
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
@@ -61,7 +61,6 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
     private var initCnt: Int = 0
     val markers = mutableListOf<Marker>()
-    val infoWindow = InfoWindow()
 
     private var mapPersistBottomFragment: MapPersistBottomFragment? = null
 
@@ -238,14 +237,6 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
                     mainActivity.showBottomFragment(document)
 
-                    if (marker.infoWindow == null) {
-                        // 현재 마커에 정보 창이 열려있지 않을 경우 엶
-                        infoWindow.open(marker)
-                    } else {
-                        // 이미 현재 마커에 정보 창이 열려있을 경우 닫음
-                        infoWindow.close()
-                    }
-
                     true
                 }
 
@@ -276,17 +267,8 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 //        val locationOverlay = naverMap.locationOverlay
 //        locationOverlay.isVisible = true
 
-        infoWindow.adapter = object : InfoWindow.DefaultTextAdapter(requireContext()) {
-            override fun getText(infoWindow: InfoWindow): CharSequence {
-                // 정보 창이 열린 마커의 tag를 텍스트로 노출하도록 반환
-                return infoWindow.marker?.tag as CharSequence? ?: ""
-            }
-        }
-
         // 지도를 클릭하면 정보 창을 닫음
         naverMap.setOnMapClickListener { pointF, latLng ->
-
-            infoWindow.close()
             mainActivity.hideBottomFragment()
         }
 

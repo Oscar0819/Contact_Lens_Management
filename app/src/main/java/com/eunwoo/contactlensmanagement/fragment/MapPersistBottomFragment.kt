@@ -56,26 +56,6 @@ class MapPersistBottomFragment :
                 }
     }
 
-//    fun setPlaceData(place: Place) {
-//        var distanceMeter: String = place.distance
-//        if (distanceMeter.toInt() < 1000) {
-//            distanceMeter = (distanceMeter.toInt() / 1000).toString() + "km"
-//        } else {
-//            distanceMeter += "m"
-//        }
-//        collapseBinding.apply {
-//            colAddressName.text = place.address_name
-//            colPlaceName.text = place.place_name
-//            colDistance.text = distanceMeter
-//        }
-//        expandBinding.apply {
-//            expPlaceName.text = place.place_name
-//            expAddressName.text = place.address_name
-//            expPhone.text = place.phone
-//            expDistance.text = distanceMeter
-//        }
-//    }
-
 
 
 }

@@ -43,6 +43,9 @@ class MainActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        setSupportActionBar(binding.toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         fragmentManager = supportFragmentManager
         // 시작 프래그먼트는 lensManagementFragment
         lensManagementFragment = LensManagementFragment.newInstance()
@@ -110,7 +113,6 @@ class MainActivity : AppCompatActivity() {
             true
         }
     }
-
 
     fun showBottomFragment(place: Place) {
 

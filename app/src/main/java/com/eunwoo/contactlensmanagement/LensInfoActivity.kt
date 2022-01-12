@@ -47,6 +47,8 @@ class LensInfoActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar
 
         // 수정 요청 확인 후 데이터 세트
         if (lensInfoViewModel.code == 1) {

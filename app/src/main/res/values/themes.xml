@@ -1,8 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.ContactLensManagement" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.ContactLensManagement" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/splash_background_color</item>
+        <item name="colorPrimary">@color/splash_background_color</item> <!-- 바텀 내비 아이콘 색생도 묶여있음 -->
         <item name="colorPrimaryVariant">@color/splash_background_color</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
@@ -13,6 +13,12 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+    <style name="LensInfoToolbarTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:textColorPrimary">@color/splash_background_color</item>
+        <item name="android:textColorSecondary">@color/splash_background_color</item>
+    </style>
+
     <!-- TextView theme. -->
     <style name="LensInfoTextViewStyle" parent="Widget.AppCompat.TextView">
         <item name="android:textColor">#4186EF</item>
@@ -29,6 +35,4 @@
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/background_splash</item>
     </style>
-
-
 </resources>

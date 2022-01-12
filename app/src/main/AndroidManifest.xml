@@ -30,7 +30,7 @@
         </activity>
         <activity
             android:name=".LensInfoActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.ContactLensManagement" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.ContactLensManagement"></activity>

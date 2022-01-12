@@ -63,7 +63,6 @@ class LensManagementFragment: Fragment() {
 //        initSwipe()
 
         binding.lensAddButton.setOnClickListener {
-
             startLensInfoActivity(0)
         }
         db = LensDatabase.getInstance(_context)

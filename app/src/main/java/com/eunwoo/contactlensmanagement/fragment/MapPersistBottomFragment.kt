@@ -24,19 +24,8 @@ class MapPersistBottomFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.d("BF", "onViewCreated")
-        viewModel.id.observe(this, Observer {
-            collapseBinding.apply {
-                colPlaceName.text = viewModel.placeName.value
-                colAddressName.text = viewModel.addressName.value
-                colDistance.text = viewModel.distance.value
-            }
-            expandBinding.apply {
-                expPlaceName.text = viewModel.placeName.value
-                expAddressName.text = viewModel.addressName.value
-                expPhone.text = viewModel.phone.value
-                expDistance.text = viewModel.distance.value
-            }
-        })
+        collapseBinding.vm = viewModel
+        expandBinding.vm = viewModel
 
         collapseBinding.viewSelect.setOnClickListener {
             expand()
@@ -55,7 +44,5 @@ class MapPersistBottomFragment :
                         .commitAllowingStateLoss()
                 }
     }
-
-
 
 }

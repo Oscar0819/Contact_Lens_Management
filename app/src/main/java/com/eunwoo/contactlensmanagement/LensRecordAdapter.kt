@@ -47,10 +47,10 @@ class LensRecordAdapter(val db: LensDatabase, var items: List<Lens>?)
         fun bind(lens: Lens, position: Int) {
             index = position
             Log.d("LRA", "INDEX : $index")
-            binding.textView.setText(lens.id.toString())
-            binding.textView2.setText(lens.name)
-            binding.textView3.setText(lens.initialDate)
-            binding.textView4.setText(lens.expirationDate)
+            binding.textView.text = lens.id.toString()
+            binding.textView2.text = lens.name
+            binding.textView3.text = lens.initialDate
+            binding.textView4.text = lens.expirationDate
 
             // 리사이클러뷰의 아이템 클릭시 아이템 수정 창이 뜨는 코드...
             itemView.setOnClickListener {

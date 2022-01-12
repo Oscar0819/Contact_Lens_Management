@@ -11,4 +11,5 @@
     <color name="thumb_color">#5782D8</color>
     <color name="track_color">#8CBAFF</color>
     <color name="splash_background_color">#4186EF</color>
+    <color name="record_item_color">#CFE2FF</color>
 </resources>

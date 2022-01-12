@@ -231,10 +231,6 @@ class MapFragment: Fragment(), OnMapReadyCallback {
                         document.phone
                 marker.onClickListener = Overlay.OnClickListener {
                     // 마커 리스너
-                    shortToastMassege("마커 클릭!")
-
-                    val marker = it as Marker
-
                     mainActivity.showBottomFragment(document)
 
                     true
@@ -264,8 +260,6 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     override fun onMapReady(p0: NaverMap) {
         Log.d(TAG, "onMapReady")
         naverMap = p0
-//        val locationOverlay = naverMap.locationOverlay
-//        locationOverlay.isVisible = true
 
         // 지도를 클릭하면 정보 창을 닫음
         naverMap.setOnMapClickListener { pointF, latLng ->

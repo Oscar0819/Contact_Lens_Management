@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.set(Calendar.HOUR_OF_DAY, 4)
-//        calendar.set(Calendar.MINUTE, 0)
+//        calendar.set(Calendar.MINUTE, 11)
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,

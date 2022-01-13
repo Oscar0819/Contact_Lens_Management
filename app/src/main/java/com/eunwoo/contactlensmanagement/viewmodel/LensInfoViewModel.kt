@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.eunwoo.contactlensmanagement.receiver.AlarmReceiver
 import com.eunwoo.contactlensmanagement.database.Lens
@@ -138,21 +139,29 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun modify() {
-        CoroutineScope(IO).launch {
-            val lens: Lens = Lens(
-                id,
-                nameEditTextContent.value.toString(),
-                leftsContent.value.toString().toDouble(),
-                rightsContent.value.toString().toDouble(),
-                productnContent.value.toString(),
-                initialdContent.value.toString(),
-                expirationdContent.value.toString(),
-                pushCheck.value,
-                memoContent.value.toString(),
-                dateTime()
-            )
-            db.lensDao().update(lens)
-
+        if (!nameEditTextContent.value.isNullOrEmpty() and
+            !initialdContent.value.isNullOrEmpty() and
+            !expirationdContent.value.isNullOrEmpty()) {
+            CoroutineScope(IO).launch {
+                val lens: Lens = Lens(
+                    id,
+                    nameEditTextContent.value.toString(),
+                    if (leftsContent.value.isNullOrEmpty()) 0.0 else leftsContent.value.toString()
+                        .toDouble(),
+                    if (rightsContent.value.isNullOrEmpty()) 0.0 else rightsContent.value.toString()
+                        .toDouble(),
+                    if (productnContent.value.isNullOrEmpty()) "" else productnContent.value.toString(),
+                    initialdContent.value.toString(),
+                    expirationdContent.value.toString(),
+                    pushCheck.value == true,
+                    if (memoContent.value == null) "" else memoContent.value.toString(),
+                    dateTime()
+                )
+                db.lensDao().update(lens)
+            }
+        } else {
+                Toast.makeText(context, "이름, 착용 시작일, 착용 기간은 반드시 입력해야합니다.", Toast.LENGTH_LONG).show()
+        }
             // 푸시 체크 후 알람 등록 및 취소
 //            if (pushCheck.value == false) {
 //                // 알람 취소 코드.
@@ -176,20 +185,19 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
 //                    setAlarm(_id.toInt())
 //                }
 //            }
-        }
     }
 
     fun save() {
-        if (nameEditTextContent.toString().isNotEmpty() and
-                initialdContent.toString().isNotEmpty() and
-                expirationdContent.toString().isNotEmpty()) {
+        if (!nameEditTextContent.value.isNullOrEmpty() and
+                !initialdContent.value.isNullOrEmpty() and
+                !expirationdContent.value.isNullOrEmpty()) {
             CoroutineScope(Default).launch {
                 launch {
                     db.lensDao().insert(Lens(null,
                         nameEditTextContent.value.toString(),
-                        leftsContent.value.toString().toDouble(),
-                        rightsContent.value.toString().toDouble(),
-                        productnContent.value.toString(),
+                        if (leftsContent.value.isNullOrEmpty()) 0.0 else leftsContent.value.toString().toDouble(),
+                        if (rightsContent.value.isNullOrEmpty()) 0.0 else rightsContent.value.toString().toDouble(),
+                        if (productnContent.value.isNullOrEmpty()) "" else productnContent.value.toString(),
                         initialdContent.value.toString(),
                         expirationdContent.value.toString(),
                         pushCheck.value == true,
@@ -197,16 +205,15 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
                         dateTime()
                         )
                     )
-
                     // 데이터베이스 크기를 가져와서 추가될 데이터의 id를 구하는 코드...
 //                    val id = db.lensDao().getList().size
-
 //                    setAlarm(id)
                 }
             }
+        } else {
+            Toast.makeText(context, "이름, 착용 시작일, 착용 기간은 반드시 입력해야합니다.", Toast.LENGTH_LONG).show()
         }
     }
-
 
     // viewModel 은 액티비티나 프래그먼트의 context를 참조하지 않게 구현하는것을 지향해야한다
 //    private fun setAlarm(requestCode: Int) {

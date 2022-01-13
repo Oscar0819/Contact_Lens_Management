@@ -1,14 +1,23 @@
 package com.eunwoo.contactlensmanagement
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import com.eunwoo.contactlensmanagement.receiver.EveryDayReceiver
 import kotlinx.coroutines.*
+import java.util.*
 
 class SplashActivity : AppCompatActivity() {
+
+    lateinit var alarmManager: AlarmManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +29,7 @@ class SplashActivity : AppCompatActivity() {
 
     fun startMainActivity() {
         CoroutineScope(Dispatchers.Main).launch {
+            checkFirst()
             delay(1000)
             val intent: Intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
@@ -62,5 +72,42 @@ class SplashActivity : AppCompatActivity() {
                 return
             }
         }
+    }
+
+
+    // 최초 실행에 알람 설정하는 코드
+    private fun checkFirst() {
+        val sp: SharedPreferences = getSharedPreferences("checkTheFirst", Context.MODE_PRIVATE)
+        val check: Boolean = sp.getBoolean("checkTheFirst", false)
+
+        if (!check) {
+            setAlarm()
+            val spEdit: SharedPreferences.Editor = sp.edit()
+            spEdit.putBoolean("checkTheFirst", true)
+            spEdit.commit()
+        }
+
+
+    }
+    private fun setAlarm() {
+        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val receiverIntent = Intent(this, EveryDayReceiver::class.java)
+        //receiverIntent.extras.putInt("id", id)
+        // requestCode를 통해 인텐트를 식별. 취소할 때 참고..
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, 9999, receiverIntent, PendingIntent.FLAG_MUTABLE
+        )
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.set(Calendar.HOUR_OF_DAY, 4)
+//        calendar.set(Calendar.MINUTE, 11)
+
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
     }
 }

@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         fragmentManager = supportFragmentManager
         // 시작 프래그먼트는 lensManagementFragment
@@ -65,31 +64,6 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "MainActivity - onCreate() called")
         initBottomNavigationBar()
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.d(TAG, "onOptionsItemSelected")
-        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val receiverIntent = Intent(this, EveryDayReceiver::class.java)
-        //receiverIntent.extras.putInt("id", id)
-        // requestCode를 통해 인텐트를 식별. 취소할 때 참고..
-        val pendingIntent = PendingIntent.getBroadcast(
-            this, 1000, receiverIntent, PendingIntent.FLAG_MUTABLE
-        )
-        val calendar: Calendar = Calendar.getInstance()
-        calendar.timeInMillis = System.currentTimeMillis()
-        calendar.set(Calendar.HOUR_OF_DAY, 4)
-//        calendar.set(Calendar.MINUTE, 11)
-
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calendar.timeInMillis,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntent
-        )
-
-        return super.onOptionsItemSelected(item)
     }
 
     // 바텀네비바 초기

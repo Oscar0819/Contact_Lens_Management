@@ -65,12 +65,15 @@ class LensInfoActivity : AppCompatActivity() {
             val month: Int = today.get(Calendar.MONTH)
             val date: Int = today.get(Calendar.DATE)
 
+            val calendar: Calendar = Calendar.getInstance()
+            val currentTime = calendar.timeInMillis // 현재 시간
             // 날짜 선택 다이얼로그
             val dlg = DatePickerDialog(this, object : DatePickerDialog.OnDateSetListener {
                 override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
                     binding.calendarButton.setText("${year}-${month+1}-${dayOfMonth}")
                 }
             }, year, month, date)
+            dlg.datePicker.maxDate = currentTime
             dlg.show()
         }
     }

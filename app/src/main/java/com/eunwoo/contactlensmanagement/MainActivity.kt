@@ -77,7 +77,6 @@ class MainActivity : AppCompatActivity() {
         val pendingIntent = PendingIntent.getBroadcast(
             this, 1000, receiverIntent, PendingIntent.FLAG_MUTABLE
         )
-
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.set(Calendar.HOUR_OF_DAY, 4)

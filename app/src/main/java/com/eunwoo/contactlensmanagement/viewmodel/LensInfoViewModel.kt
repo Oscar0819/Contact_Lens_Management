@@ -9,8 +9,7 @@ import android.content.Context.NOTIFICATION_SERVICE
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.*
-import androidx.work.impl.background.systemalarm.SystemAlarmService
-import com.eunwoo.contactlensmanagement.AlarmReceiver
+import com.eunwoo.contactlensmanagement.receiver.AlarmReceiver
 import com.eunwoo.contactlensmanagement.database.Lens
 import com.eunwoo.contactlensmanagement.database.LensDatabase
 import com.eunwoo.contactlensmanagement.dataclass.LensInfo
@@ -149,33 +148,34 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
                 initialdContent.value.toString(),
                 expirationdContent.value.toString(),
                 pushCheck.value,
-                memoContent.value.toString()
+                memoContent.value.toString(),
+                dateTime()
             )
             db.lensDao().update(lens)
 
             // 푸시 체크 후 알람 등록 및 취소
-            if (pushCheck.value == false) {
-                // 알람 취소 코드.
-                val intent: Intent = Intent(context, AlarmReceiver::class.java)
-                val sender: PendingIntent = PendingIntent.getBroadcast(context,
-                    _id.toInt(),
-                    intent,
-                    PendingIntent.FLAG_MUTABLE)
-                if (sender != null) {
-                    val am: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-                    am.cancel(sender)
-                    sender.cancel()
-                }
-            } else { // true : id를 통해 알람을 확인 후 알람이 있으면 변화x 알람이 없으면 새로 추가.
-                val intent: Intent = Intent(context, AlarmReceiver::class.java)
-                val sender: PendingIntent? = PendingIntent.getBroadcast(context,
-                    _id.toInt(),
-                    intent,
-                    PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_NO_CREATE)
-                if (sender == null) { // sender가 null인 경우 아직 알람이 생성되지않아서 새로 생성해줘야함
-                    setAlarm(_id.toInt())
-                }
-            }
+//            if (pushCheck.value == false) {
+//                // 알람 취소 코드.
+//                val intent: Intent = Intent(context, AlarmReceiver::class.java)
+//                val sender: PendingIntent = PendingIntent.getBroadcast(context,
+//                    _id.toInt(),
+//                    intent,
+//                    PendingIntent.FLAG_MUTABLE)
+//                if (sender != null) {
+//                    val am: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//                    am.cancel(sender)
+//                    sender.cancel()
+//                }
+//            } else { // true : id를 통해 알람을 확인 후 알람이 있으면 변화x 알람이 없으면 새로 추가.
+//                val intent: Intent = Intent(context, AlarmReceiver::class.java)
+//                val sender: PendingIntent? = PendingIntent.getBroadcast(context,
+//                    _id.toInt(),
+//                    intent,
+//                    PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_NO_CREATE)
+//                if (sender == null) { // sender가 null인 경우 아직 알람이 생성되지않아서 새로 생성해줘야함
+//                    setAlarm(_id.toInt())
+//                }
+//            }
         }
     }
 
@@ -192,13 +192,16 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
                         productnContent.value.toString(),
                         initialdContent.value.toString(),
                         expirationdContent.value.toString(),
-                        pushCheck.value,
-                        memoContent.value.toString()))
+                        pushCheck.value == true,
+                        if (memoContent.value == null) "" else memoContent.value.toString(),
+                        dateTime()
+                        )
+                    )
 
                     // 데이터베이스 크기를 가져와서 추가될 데이터의 id를 구하는 코드...
-                    val id = db.lensDao().getList().size
+//                    val id = db.lensDao().getList().size
 
-                    setAlarm(id)
+//                    setAlarm(id)
                 }
             }
         }
@@ -206,73 +209,119 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
 
 
     // viewModel 은 액티비티나 프래그먼트의 context를 참조하지 않게 구현하는것을 지향해야한다
-    private fun setAlarm(requestCode: Int) {
-        if (pushCheck.value == true) {
-            Log.d(TAG, "setAlarm Called ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())}")
-            val notificationManager: NotificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//    private fun setAlarm(requestCode: Int) {
+//        if (pushCheck.value == true) {
+//            Log.d(TAG, "setAlarm Called ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis())}")
+//            val notificationManager: NotificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//
+//            val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+//
+////            val today = GregorianCalendar()
+////
+////            val selectDate: String = initialdContent.value.toString()
+////            val todayDate: String = "${today.get(Calendar.YEAR)}-${today.get(Calendar.MONTH) + 1}-${today.get(Calendar.DATE)}"
+////            val expirationDate: String = expirationdContent.value.toString()
+////
+////            Log.d(TAG, "선택 날짜 : ${selectDate}")
+////            Log.d(TAG, "오늘 날짜 : ${todayDate}")
+////            Log.d(TAG, "만료 날짜 : ${expirationDate}")
+////
+////            val dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+////
+////            val FirstDate: Date = try {
+////                dateFormat.parse(todayDate)
+////            } catch (e: ParseException) {
+////                Date()
+////            }
+////            Log.d(TAG, "FirstDate : ${FirstDate}")
+////            val SecondDate: Date = try {
+////                dateFormat.parse(selectDate)
+////            } catch (e: ParseException) {
+////                Date()
+////            }
+////            Log.d(TAG, "SecondDate : ${SecondDate}")
+////
+////            val calDate: Long = FirstDate.time - SecondDate.time
+////            Log.d(TAG, "calDate : ${calDate}")
+////
+////            var calDateDays: Long = calDate / (24*60*60*1000)
+////            Log.d(TAG, "calDateDays : ${calDateDays}")
+////
+////            // 두 날짜의 차이...
+////            calDateDays = abs(calDateDays)
+////            Log.d(TAG, "두 날짜의 차이 : ${calDateDays}")
+////
+////            // ----------------
+////            val datetime: Long = (expirationDate.toLong() - calDateDays)
+////            Log.d(TAG, "datatime : ${datetime}")
+////
+////            // triggerTime
+////            val beforeDay: Long = datetime - 1
+////            val dDay: Long = datetime
+//
+//            // 24*60*60*1000(각 시간값에 따른 차이점) 을 나눠주면 일수
+//            val triggerTime: Long = System.currentTimeMillis() + (dateTime() * 24 * 60 * 60 * 1000)
+//            Log.d(TAG, "triggerTime : ${triggerTime}")
+//            //-----------------
+//
+//            val receiverIntent = Intent(context, AlarmReceiver::class.java)
+//            // requestCode를 통해 인텐트를 식별. 취소할 때 참고..
+//            // requestCode는 각 아이템의 id 값과 동일
+//            val pendingIntent = PendingIntent.getBroadcast(
+//                context, requestCode, receiverIntent, PendingIntent.FLAG_MUTABLE
+//            )
+//
+//            alarmManager.set(AlarmManager.RTC_WAKEUP,
+//                System.currentTimeMillis() + 10 * 1000,
+//                pendingIntent
+//            )
+//        }
+//    }
 
-            val alarmManager: AlarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+    private fun dateTime(): Long {
+        val today = GregorianCalendar()
 
-            val today = GregorianCalendar()
+        val selectDate: String = initialdContent.value.toString()
+        val todayDate: String = "${today.get(Calendar.YEAR)}-${today.get(Calendar.MONTH) + 1}-${today.get(Calendar.DATE)}"
+        val expirationDate: String = expirationdContent.value.toString()
 
-            val selectDate: String = initialdContent.value.toString()
-            val todayDate: String = "${today.get(Calendar.YEAR)}-${today.get(Calendar.MONTH) + 1}-${today.get(Calendar.DATE)}"
-            val expirationDate: String = expirationdContent.value.toString()
+        Log.d(TAG, "선택 날짜 : ${selectDate}")
+        Log.d(TAG, "오늘 날짜 : ${todayDate}")
+        Log.d(TAG, "만료 날짜 : ${expirationDate}")
 
-            Log.d(TAG, "선택 날짜 : ${selectDate}")
-            Log.d(TAG, "오늘 날짜 : ${todayDate}")
-            Log.d(TAG, "만료 날짜 : ${expirationDate}")
+        val dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
 
-            val dateFormat: SimpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
-
-            val FirstDate: Date = try {
-                dateFormat.parse(todayDate)
-            } catch (e: ParseException) {
-                Date()
-            }
-            Log.d(TAG, "FirstDate : ${FirstDate}")
-            val SecondDate: Date = try {
-                dateFormat.parse(selectDate)
-            } catch (e: ParseException) {
-                Date()
-            }
-            Log.d(TAG, "SecondDate : ${SecondDate}")
-
-            val calDate: Long = FirstDate.time - SecondDate.time
-            Log.d(TAG, "calDate : ${calDate}")
-
-            var calDateDays: Long = calDate / (24*60*60*1000)
-            Log.d(TAG, "calDateDays : ${calDateDays}")
-
-            // 두 날짜의 차이...
-            calDateDays = abs(calDateDays)
-            Log.d(TAG, "두 날짜의 차이 : ${calDateDays}")
-
-            // ----------------
-            val datetime: Long = (expirationDate.toLong() - calDateDays)
-            Log.d(TAG, "datatime : ${datetime}")
-
-            // triggerTime
-            val beforeDay: Long = datetime - 1
-            val dDay: Long = datetime
-
-            // 24*60*60*1000(각 시간값에 따른 차이점) 을 나눠주면 일수
-            val triggerTime: Long = System.currentTimeMillis() + (datetime * 24 * 60 * 60 * 1000)
-            Log.d(TAG, "triggerTime : ${triggerTime}")
-            //-----------------
-
-            val receiverIntent = Intent(context, AlarmReceiver::class.java)
-            // requestCode를 통해 인텐트를 식별. 취소할 때 참고..
-            // requestCode는 각 아이템의 id 값과 동일
-            val pendingIntent = PendingIntent.getBroadcast(
-                context, requestCode, receiverIntent, PendingIntent.FLAG_MUTABLE
-            )
-
-            alarmManager.set(AlarmManager.RTC_WAKEUP,
-                System.currentTimeMillis() + 10 * 1000,
-                pendingIntent
-            )
+        val FirstDate: Date = try {
+            dateFormat.parse(todayDate)
+        } catch (e: ParseException) {
+            Date()
         }
+        Log.d(TAG, "FirstDate : ${FirstDate}")
+        val SecondDate: Date = try {
+            dateFormat.parse(selectDate)
+        } catch (e: ParseException) {
+            Date()
+        }
+        Log.d(TAG, "SecondDate : ${SecondDate}")
 
+        val calDate: Long = FirstDate.time - SecondDate.time
+        Log.d(TAG, "calDate : ${calDate}")
+
+        var calDateDays: Long = calDate / (24*60*60*1000)
+        Log.d(TAG, "calDateDays : ${calDateDays}")
+
+        // 두 날짜의 차이...
+        calDateDays = abs(calDateDays)
+        Log.d(TAG, "두 날짜의 차이 : ${calDateDays}")
+
+        // ----------------
+        val datetime: Long = (expirationDate.toLong() - calDateDays)
+        Log.d(TAG, "datatime : ${datetime}")
+
+        // triggerTime
+        val dDay: Long = datetime
+
+        return dDay
     }
+
 }

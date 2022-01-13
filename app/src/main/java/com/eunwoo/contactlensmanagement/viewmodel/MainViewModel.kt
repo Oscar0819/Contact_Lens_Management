@@ -65,8 +65,8 @@ class MainViewModel: ViewModel(){
             phoneCheck = "연락처가 등록되지 않았습니다."
         }
 
-        if (distanceMeter.toInt() >= 1000) {
-            distanceMeter = (distanceMeter.toInt() / 1000).toString() + "km"
+        if (distanceMeter.toDouble() >= 1000) {
+            distanceMeter = ((distanceMeter.toDouble() / 1000.0)).toString() + "km"
 
         } else {
             distanceMeter += "m"

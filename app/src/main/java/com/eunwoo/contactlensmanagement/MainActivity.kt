@@ -1,8 +1,13 @@
 package com.eunwoo.contactlensmanagement
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
@@ -14,7 +19,10 @@ import com.eunwoo.contactlensmanagement.fragment.LensManagementFragment
 import com.eunwoo.contactlensmanagement.fragment.MapFragment
 import com.eunwoo.contactlensmanagement.fragment.MapPersistBottomFragment
 import com.eunwoo.contactlensmanagement.fragment.ProfileFragment
+import com.eunwoo.contactlensmanagement.receiver.AlarmReceiver
+import com.eunwoo.contactlensmanagement.receiver.EveryDayReceiver
 import com.eunwoo.contactlensmanagement.viewmodel.MainViewModel
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,6 +37,8 @@ class MainActivity : AppCompatActivity() {
     private var bottomFragmentCnt = 0
 
     private val viewModel: MainViewModel by viewModels()
+
+    lateinit var alarmManager: AlarmManager
 
     companion object {
         const val TAG: String = "로그"
@@ -45,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         fragmentManager = supportFragmentManager
         // 시작 프래그먼트는 lensManagementFragment
@@ -54,6 +65,32 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "MainActivity - onCreate() called")
         initBottomNavigationBar()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.d(TAG, "onOptionsItemSelected")
+        alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val receiverIntent = Intent(this, EveryDayReceiver::class.java)
+        //receiverIntent.extras.putInt("id", id)
+        // requestCode를 통해 인텐트를 식별. 취소할 때 참고..
+        val pendingIntent = PendingIntent.getBroadcast(
+            this, 1000, receiverIntent, PendingIntent.FLAG_MUTABLE
+        )
+
+        val calendar: Calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+        calendar.set(Calendar.HOUR_OF_DAY, 4)
+//        calendar.set(Calendar.MINUTE, 0)
+
+        alarmManager.setRepeating(
+            AlarmManager.RTC_WAKEUP,
+            calendar.timeInMillis,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntent
+        )
+
+        return super.onOptionsItemSelected(item)
     }
 
     // 바텀네비바 초기

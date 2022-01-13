@@ -1,4 +1,4 @@
-package com.eunwoo.contactlensmanagement
+package com.eunwoo.contactlensmanagement.receiver
 
 import android.app.*
 import android.content.BroadcastReceiver
@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
+import com.eunwoo.contactlensmanagement.R
 import java.text.SimpleDateFormat
 
 class AlarmReceiver: BroadcastReceiver() {
@@ -55,7 +56,7 @@ class AlarmReceiver: BroadcastReceiver() {
             setContentTitle("제목")
             setContentText("렌즈 사용기한이 임박했습니다.")
 //            setContentIntent(pendingIntent)
-            setSmallIcon(R.drawable.ic_launcher_background)
+            setSmallIcon(R.drawable.ic_icon)
             setPriority(NotificationCompat.PRIORITY_HIGH)
 //            setFullScreenIntent(pendingIntent, true)
             setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)

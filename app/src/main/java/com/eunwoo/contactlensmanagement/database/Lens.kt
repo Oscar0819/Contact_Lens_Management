@@ -32,5 +32,8 @@ data class Lens(
     var pushCheck: Boolean?,
 
     @ColumnInfo(name = "memo")
-    var memo: String?
+    var memo: String?,
+
+    @ColumnInfo(name = "expiration_date_2")
+    var expirationDate2: Long?
 )

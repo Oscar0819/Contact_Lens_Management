@@ -2,21 +2,23 @@ package com.eunwoo.contactlensmanagement.fragment
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.icu.lang.UCharacter
+import android.content.res.Resources
+import android.graphics.*
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
-import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eunwoo.contactlensmanagement.*
 import com.eunwoo.contactlensmanagement.database.LensDatabase
 import com.eunwoo.contactlensmanagement.databinding.LensManagementFragmentBinding
-import java.security.MessageDigest
+import com.eunwoo.contactlensmanagement.helper.SwipeHelperCallback
 
 class LensManagementFragment: Fragment() {
     // 싱글톤
@@ -74,6 +76,7 @@ class LensManagementFragment: Fragment() {
             // update UI
             mAdapter = LensRecordAdapter(db!!,it)
             binding.lensRecordRecyclerview.adapter = mAdapter
+//            setSwipe()
         })
 
         return binding.root
@@ -88,5 +91,20 @@ class LensManagementFragment: Fragment() {
         
     }
 
+//    fun setSwipe() {
+//
+//        val swipeHelperCallback = SwipeHelperCallback(mAdapter).apply {
+//            // 스와이프한 뒤 고정시킬 위치 지정
+//            setClamp(resources.displayMetrics.widthPixels.toFloat() / 4) // 1080 / 4 = 270
+//        }
+//        ItemTouchHelper(swipeHelperCallback).attachToRecyclerView(binding.lensRecordRecyclerview)
+
+
+        // 다른 곳 터치 시 기존 선택했던 뷰 닫기
+//        binding.lensRecordRecyclerview.setOnTouchListener { _, _ ->
+//            swipeHelperCallback.removePreviousClamp(binding.lensRecordRecyclerview)
+//            false
+//        }
+//    }
 
 }

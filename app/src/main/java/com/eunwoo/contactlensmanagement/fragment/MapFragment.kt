@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.*
 
 import androidx.lifecycle.ViewModelProvider
@@ -80,6 +81,8 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         Log.d(TAG, "MapFragment - onAttach() called")
+
+
     }
 
     // 뷰가 생성되었을 때
@@ -93,11 +96,16 @@ class MapFragment: Fragment(), OnMapReadyCallback {
 
         binding = MapFragmentBinding.inflate(inflater, container, false)
 
+        binding.animationView.playAnimation()
+//        binding.animationView.loop(true)
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.mapView.visibility = View.INVISIBLE
 
         mapView = binding.mapView
         mapView.onCreate(savedInstanceState)
@@ -243,6 +251,11 @@ class MapFragment: Fragment(), OnMapReadyCallback {
                 it.map = naverMap
             }
 
+            binding.mapView.visibility = View.VISIBLE
+            binding.animationView.pauseAnimation()
+            binding.animationView.visibility = View.GONE
+
+
         } else {
             // 검색 결과 없음
             shortToastMassege("검색 결과가 없습니다.")
@@ -256,6 +269,8 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     private fun longToastMassege(s: String) {
         Toast.makeText(context, s, Toast.LENGTH_LONG).show()
     }
+
+
 
     override fun onMapReady(p0: NaverMap) {
         Log.d(TAG, "onMapReady")

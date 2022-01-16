@@ -14,6 +14,7 @@ import com.eunwoo.contactlensmanagement.databinding.LensRecordItemBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import java.lang.IndexOutOfBoundsException
 
 class LensRecordAdapter(val db: LensDatabase, var items: List<Lens>?)
     : RecyclerView.Adapter<LensRecordAdapter.ViewHolder>() {
@@ -42,6 +43,12 @@ class LensRecordAdapter(val db: LensDatabase, var items: List<Lens>?)
         return items
     }
 
+    fun removeData(position: Int) {
+        CoroutineScope(IO).launch {
+            db.lensDao().delete(items!!.get(position))
+        }
+    }
+
     inner class ViewHolder(private val binding: LensRecordItemBinding): RecyclerView.ViewHolder(binding.root){
         var index: Int? = null
         fun bind(lens: Lens, position: Int) {
@@ -64,6 +71,10 @@ class LensRecordAdapter(val db: LensDatabase, var items: List<Lens>?)
                 }
             }
 
+//            binding.itemDelete.setOnClickListener {
+//                removeData(position)
+//            }
         }
+
     }
 }

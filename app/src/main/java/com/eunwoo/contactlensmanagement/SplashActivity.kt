@@ -90,6 +90,7 @@ class SplashActivity : AppCompatActivity() {
 
     }
     private fun setAlarm() {
+        Log.d("splash", "setAlarm called!!")
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         val receiverIntent = Intent(this, EveryDayReceiver::class.java)
@@ -101,10 +102,10 @@ class SplashActivity : AppCompatActivity() {
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.set(Calendar.HOUR_OF_DAY, 4)
-//        calendar.set(Calendar.MINUTE, 11)
+//        calendar.set(Calendar.MINUTE, 0)
 
-        alarmManager.setRepeating(
-            AlarmManager.RTC_WAKEUP,
+        alarmManager.setInexactRepeating(
+            AlarmManager.RTC,
             calendar.timeInMillis,
             AlarmManager.INTERVAL_DAY,
             pendingIntent

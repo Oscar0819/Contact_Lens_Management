@@ -44,15 +44,18 @@ class EveryDayReceiver: BroadcastReceiver() {
                         if (it.expirationDate2!! > 2) {
                             updateExpirationDate2(it)
                         } else if (it.expirationDate2!! == 2L) {
-                            updateExpirationDate2(it)
                             if (it.pushCheck == true) {
                                 exeAlarm(context, it.expirationDate2!!)
+                                updateExpirationDate2(it)
+                            } else {
+                                updateExpirationDate2(it)
                             }
                         } else if (it.expirationDate2!! == 1L) {
-                            updateExpirationDate2(it)
                             if (it.pushCheck == true) {
                                 exeAlarm(context, it.expirationDate2!!)
-                                updatePushCheck(it)
+                                updateExpirationDate2AndPushCheck(it)
+                            } else {
+                                updateExpirationDate2(it)
                             }
                         }
                     }
@@ -62,7 +65,7 @@ class EveryDayReceiver: BroadcastReceiver() {
 
     }
 
-    fun updateExpirationDate2(lens: Lens) {
+    private fun updateExpirationDate2(lens: Lens) {
         db.lensDao().update(Lens(lens.id,
             lens.name,
             lens.leftSight,
@@ -76,7 +79,7 @@ class EveryDayReceiver: BroadcastReceiver() {
         ))
     }
 
-    fun updatePushCheck(lens: Lens) {
+    private fun updateExpirationDate2AndPushCheck(lens: Lens) {
         db.lensDao().update(Lens(lens.id,
             lens.name,
             lens.leftSight,
@@ -86,12 +89,12 @@ class EveryDayReceiver: BroadcastReceiver() {
             lens.expirationDate,
             false,
             lens.memo,
-            lens.expirationDate2
+            lens.expirationDate2!! - 1
         ))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun exeAlarm(context: Context, expirationDate2: Long) {
+    private fun exeAlarm(context: Context, expirationDate2: Long) {
         manager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         manager.createNotificationChannel(

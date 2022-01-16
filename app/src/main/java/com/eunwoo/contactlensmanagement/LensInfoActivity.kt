@@ -1,11 +1,14 @@
 package com.eunwoo.contactlensmanagement
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.content.DialogInterface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -41,9 +44,14 @@ class LensInfoActivity : AppCompatActivity() {
         lensInfoViewModel.increaseCnt()
 
         // 인텐트 값을 viewmodel에 전달
-        lensInfoViewModel.setCode(
-            intent.getIntExtra("code", 99),
-        )
+        lensInfoViewModel.apply {
+            setCode(
+                intent.getIntExtra("code", 99)
+            )
+            setIndex(
+                intent.getLongExtra("index", 999)
+            )
+        }
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -58,33 +66,19 @@ class LensInfoActivity : AppCompatActivity() {
             lensInfoViewModel.initModify()
         }
 
-        binding.calendarButton.setOnClickListener {
-            // 그레고리력..
-            val today = GregorianCalendar()
-            val year: Int = today.get(Calendar.YEAR)
-            val month: Int = today.get(Calendar.MONTH)
-            val date: Int = today.get(Calendar.DATE)
-
-            val calendar: Calendar = Calendar.getInstance()
-            val currentTime = calendar.timeInMillis // 현재 시간
-            // 날짜 선택 다이얼로그
-            val dlg = DatePickerDialog(this, object : DatePickerDialog.OnDateSetListener {
-                override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-                    binding.calendarButton.setText("${year}-${month+1}-${dayOfMonth}")
-                }
-            }, year, month, date)
-            dlg.datePicker.maxDate = currentTime
-            dlg.show()
-        }
+        initOnClickListener()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.lens_info_toolbar_menu, menu)
-        // 목적에 따른 텍스트 설정
+        // 목적에 따른 텍스트와 삭제 버튼 설정
         if (lensInfoViewModel.code == 0) {
             menu!!.findItem(R.id.save_or_modify).title = "저장"
+            binding.deleteButton.visibility = View.GONE
         } else if (lensInfoViewModel.code == 1) {
             menu!!.findItem(R.id.save_or_modify).title = "수정"
+            binding.deleteButton.visibility = View.VISIBLE
+
         }
 
         return true
@@ -107,6 +101,46 @@ class LensInfoActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun initOnClickListener() {
+        binding.calendarButton.setOnClickListener {
+            // 그레고리력..
+            val today = GregorianCalendar()
+            val year: Int = today.get(Calendar.YEAR)
+            val month: Int = today.get(Calendar.MONTH)
+            val date: Int = today.get(Calendar.DATE)
+
+            val calendar: Calendar = Calendar.getInstance()
+            val currentTime = calendar.timeInMillis // 현재 시간
+            // 날짜 선택 다이얼로그
+            val dlg = DatePickerDialog(this, object : DatePickerDialog.OnDateSetListener {
+                override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+                    binding.calendarButton.setText("${year}-${month+1}-${dayOfMonth}")
+                }
+            }, year, month, date)
+            dlg.datePicker.maxDate = currentTime
+            dlg.show()
+        }
+
+        binding.deleteButton.setOnClickListener {
+            Log.d(TAG, "onClick deletebutton")
+            AlertDialog.Builder(this)
+                .setTitle("삭제")
+                .setMessage("삭제하시겠습니까?")
+                .setPositiveButton("ok", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, which: Int) {
+                        lensInfoViewModel.delete()
+                        finish()
+                    }
+                })
+                .setNegativeButton("cancel", object : DialogInterface.OnClickListener {
+                    override fun onClick(dialog: DialogInterface, which: Int) {
+                    }
+                })
+                .create()
+                .show()
+        }
     }
 }
 

@@ -215,6 +215,13 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun delete() {
+        CoroutineScope(IO).launch {
+            db.lensDao().delete(db.lensDao().getList().get(_index.toInt()))
+
+        }
+    }
+
     // viewModel 은 액티비티나 프래그먼트의 context를 참조하지 않게 구현하는것을 지향해야한다
 //    private fun setAlarm(requestCode: Int) {
 //        if (pushCheck.value == true) {

@@ -93,8 +93,13 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
         _code = c
     }
 
-    fun setIndex(indx: Long) {
-        _index = indx
+    fun setIndex(index: Long) {
+        Log.d(TAG, "!!!!! index : $index")
+        CoroutineScope(IO).launch {
+            Log.d(TAG, "!!!!! db.size : ${db.lensDao().getList().size}")
+
+        }
+        _index = index
     }
 
     fun setId(i: Long) {
@@ -217,8 +222,22 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
 
     fun delete() {
         CoroutineScope(IO).launch {
-            db.lensDao().delete(db.lensDao().getList().get(_index.toInt()))
-
+            db.lensDao().delete(db.lensDao().getList()[_index.toInt()])
+            val size = db.lensDao().getList().size
+            // 위 코드로인해 사이즈가 감소한 상태의 사이즈를 가져옴.. 그래서 0부터 시작하는 인덱스와 맞춰서 계산
+            if (_index.toInt() != size) { // 삭제한 인덱스 값이 List의 값과 같은지 확인했을 때 같으면
+                for (i in index.toInt()..size) {// index = 1, size = 4 (..연산자는 1~4 until은 1~3)
+                    val lens: Lens = db.lensDao().getList()[i]
+                    if (i == size) {
+                        db.lensDao().delete(lens)
+                    }
+                    lens.id = lens.id?.minus(1)
+                    // 동일한 id를 넣었을 때 덮어씌우기 설정되어있음
+                    db.lensDao().insert(lens)
+                }
+            } else {
+                // 같은 경우엔 마지막 인덱스이므로 정렬을 할 필요가 없음
+            }
         }
     }
 
@@ -291,7 +310,6 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
 //            )
 //        }
 //    }
-
     private fun dateTime(): Long {
         val today = GregorianCalendar()
 

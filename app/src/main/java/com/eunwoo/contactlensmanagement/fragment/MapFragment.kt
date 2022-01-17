@@ -210,9 +210,9 @@ class MapFragment: Fragment(), OnMapReadyCallback {
                 response: Response<ResultSearchKeyword>
             ) {
                 // 통신 성공 (검색 결과는 response.body()에 담겨있음)
-                Log.d("Test", "Raw: ${response.raw()}")
-                Log.d("Test", "Body: ${response.body()}")
-                shortToastMassege("통신 성공!")
+//                Log.d("Test", "Raw: ${response.raw()}")
+//                Log.d("Test", "Body: ${response.body()}")
+//                shortToastMassege("통신 성공!")
                 addItemsAndMarkers(response.body())
             }
 

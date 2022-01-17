@@ -69,7 +69,7 @@ class LensManagementFragment: Fragment() {
         }
         db = LensDatabase.getInstance(_context)
         binding.lensRecordRecyclerview.setHasFixedSize(true)
-        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(_context, LinearLayoutManager.VERTICAL, true)//, LinearLayoutManager.VERTICAL, true
+        val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(_context, LinearLayoutManager.VERTICAL, false)//, LinearLayoutManager.VERTICAL, true
         binding.lensRecordRecyclerview.layoutManager = layoutManager
         //UI 갱신 (라이브데이터 Observer 이용, 해당 디비값이 변화가생기면 실행됨)
         db!!.lensDao().getAll().observe(viewLifecycleOwner, androidx.lifecycle.Observer{

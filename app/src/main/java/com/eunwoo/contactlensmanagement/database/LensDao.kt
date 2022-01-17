@@ -5,10 +5,10 @@ import androidx.room.*
 
 @Dao
 interface LensDao {
-    @Query("SELECT * FROM lensTable ORDER BY id DESC")
+    @Query("SELECT * FROM lensTable ORDER BY id ASC")
     fun getAll(): LiveData<List<Lens>>
 
-    @Query("SELECT * FROM lensTable ORDER BY id DESC")
+    @Query("SELECT * FROM lensTable ORDER BY id ASC")
     fun getList(): List<Lens>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

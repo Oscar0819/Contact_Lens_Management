@@ -1,6 +1,5 @@
 package com.eunwoo.contactlensmanagement
 
-import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -19,7 +18,6 @@ import com.eunwoo.contactlensmanagement.fragment.LensManagementFragment
 import com.eunwoo.contactlensmanagement.fragment.MapFragment
 import com.eunwoo.contactlensmanagement.fragment.MapPersistBottomFragment
 import com.eunwoo.contactlensmanagement.fragment.ProfileFragment
-import com.eunwoo.contactlensmanagement.receiver.AlarmReceiver
 import com.eunwoo.contactlensmanagement.receiver.EveryDayReceiver
 import com.eunwoo.contactlensmanagement.viewmodel.MainViewModel
 import java.util.*
@@ -37,8 +35,6 @@ class MainActivity : AppCompatActivity() {
     private var bottomFragmentCnt = 0
 
     private val viewModel: MainViewModel by viewModels()
-
-    lateinit var alarmManager: AlarmManager
 
     companion object {
         const val TAG: String = "로그"

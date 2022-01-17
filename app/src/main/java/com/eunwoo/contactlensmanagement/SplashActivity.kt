@@ -29,7 +29,8 @@ class SplashActivity : AppCompatActivity() {
 
     fun startMainActivity() {
         CoroutineScope(Dispatchers.Main).launch {
-            checkFirst()
+//            checkFirst()
+            setAlarm()
             delay(1000)
             val intent: Intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
@@ -76,19 +77,19 @@ class SplashActivity : AppCompatActivity() {
 
 
     // 최초 실행에 알람 설정하는 코드
-    private fun checkFirst() {
-        val sp: SharedPreferences = getSharedPreferences("checkTheFirst", Context.MODE_PRIVATE)
-        val check: Boolean = sp.getBoolean("checkTheFirst", false)
+//    private fun checkFirst() {
+//        val sp: SharedPreferences = getSharedPreferences("checkTheFirst", Context.MODE_PRIVATE)
+//        val check: Boolean = sp.getBoolean("checkTheFirst", false)
+//
+//        if (!check) {
+//            setAlarm()
+//            val spEdit: SharedPreferences.Editor = sp.edit()
+//            spEdit.putBoolean("checkTheFirst", true)
+//            spEdit.commit()
+//        }
+//
+//    }
 
-        if (!check) {
-            setAlarm()
-            val spEdit: SharedPreferences.Editor = sp.edit()
-            spEdit.putBoolean("checkTheFirst", true)
-            spEdit.commit()
-        }
-
-
-    }
     private fun setAlarm() {
         Log.d("splash", "setAlarm called!!")
         alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -111,4 +112,5 @@ class SplashActivity : AppCompatActivity() {
             pendingIntent
         )
     }
+
 }

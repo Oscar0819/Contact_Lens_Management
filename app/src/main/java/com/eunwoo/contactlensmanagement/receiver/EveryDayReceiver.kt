@@ -29,7 +29,6 @@ class EveryDayReceiver: BroadcastReceiver() {
 
         private val D_CHANNEL_ID: String = "Expiration Date Notification Channel"
         private val D_CHANNEL_NAME: String = "Expiration Date Notification Channel"
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

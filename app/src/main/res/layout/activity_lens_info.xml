@@ -194,6 +194,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="유효기간 푸시알림"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="48dp"
+                    android:textAppearance="@style/LensInfoTextViewStyle"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/calendarButton" />
+
 
                 <Switch
                     android:id="@+id/notificationSwitch"
@@ -202,12 +213,11 @@
                     android:layout_marginStart="24dp"
                     android:layout_marginLeft="24dp"
                     android:layout_marginTop="48dp"
-                    android:text="유효기간 푸시알림"
                     android:checked="@={viewmodel.pushCheck}"
                     android:thumb="@drawable/thumb_custom"
                     android:track="@drawable/track_custom"
                     style="@style/LensInfoTextViewStyle"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/textView11"
                     app:layout_constraintTop_toBottomOf="@+id/calendarButton" />
 
                 <TextView

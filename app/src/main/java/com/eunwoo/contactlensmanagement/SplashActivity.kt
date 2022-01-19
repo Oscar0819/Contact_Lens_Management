@@ -37,7 +37,6 @@ class SplashActivity : AppCompatActivity() {
             finish()
         }
 
-
     }
 
     // 권한 확인
@@ -103,7 +102,7 @@ class SplashActivity : AppCompatActivity() {
         val calendar: Calendar = Calendar.getInstance()
         calendar.timeInMillis = System.currentTimeMillis()
         calendar.set(Calendar.HOUR_OF_DAY, 4)
-//        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.MINUTE, 0)
 
         alarmManager.setInexactRepeating(
             AlarmManager.RTC,

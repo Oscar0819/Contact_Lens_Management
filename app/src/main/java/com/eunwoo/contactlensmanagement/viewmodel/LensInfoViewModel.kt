@@ -158,7 +158,7 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
                     if (productnContent.value.isNullOrEmpty()) "" else productnContent.value.toString(),
                     initialdContent.value.toString(),
                     expirationdContent.value.toString(),
-                    pushCheck.value == true,
+                    if (dateTime().toInt() < 0) false else pushCheck.value == true, // dateTime이 0이하면 false반환 그게 아니면 pushCheck를 확인 후 값 반환..
                     if (memoContent.value == null) "" else memoContent.value.toString(),
                     dateTime()
                 )
@@ -205,7 +205,7 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
                         if (productnContent.value.isNullOrEmpty()) "" else productnContent.value.toString(),
                         initialdContent.value.toString(),
                         expirationdContent.value.toString(),
-                        pushCheck.value == true,
+                        if (dateTime().toInt() == 0) false else pushCheck.value == true, // dateTime이 0이하면 false반환 그게 아니면 pushCheck를 확인 후 값 반환..
                         if (memoContent.value == null) "" else memoContent.value.toString(),
                         dateTime()
                         )
@@ -342,12 +342,15 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
         var calDateDays: Long = calDate / (24*60*60*1000)
         Log.d(TAG, "calDateDays : ${calDateDays}")
 
-        // 두 날짜의 차이...
         calDateDays = abs(calDateDays)
-        Log.d(TAG, "두 날짜의 차이 : ${calDateDays}")
+        Log.d(TAG, "calDateDays abs : ${calDateDays}")
 
-        // ----------------
-        val datetime: Long = (expirationDate.toLong() - calDateDays)
+        // 두 날짜의 차이...
+        var datetime: Long = (expirationDate.toLong() - calDateDays)
+        // 차이값이 -가 될 경우 0으로 셋
+        if (datetime < 0) {
+            datetime = 0
+        }
         Log.d(TAG, "datatime : ${datetime}")
 
         // triggerTime

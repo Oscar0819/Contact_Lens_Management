@@ -1,5 +1,7 @@
 package com.eunwoo.contactlensmanagement.viewmodel
 
+import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
@@ -54,7 +56,8 @@ class MainViewModel: ViewModel(){
         get() = _distance
 
     companion object {
-        const val TAG: String = "MainViewModel"
+        private const val TAG: String = "MainViewModel"
+        private const val EMPTY_PHONE_NUMBER= "연락처가 등록되지 않았습니다."
     }
     // Rest of the ViewModel...
 
@@ -62,7 +65,7 @@ class MainViewModel: ViewModel(){
         var phoneCheck: String = place.phone
         var distanceMeter: String = place.distance
         if (phoneCheck == "") {
-            phoneCheck = "연락처가 등록되지 않았습니다."
+            phoneCheck = EMPTY_PHONE_NUMBER
         }
 
         if (distanceMeter.toDouble() >= 1000) {
@@ -78,5 +81,12 @@ class MainViewModel: ViewModel(){
         _id.value = place.id
     }
 
+    fun call(): Boolean {
+        if (_phone.value != EMPTY_PHONE_NUMBER) {
+            return true
+        } else {
+            return false
+        }
+    }
 
 }

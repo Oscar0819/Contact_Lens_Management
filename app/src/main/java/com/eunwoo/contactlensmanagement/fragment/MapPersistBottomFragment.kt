@@ -1,9 +1,12 @@
 package com.eunwoo.contactlensmanagement.fragment
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.annotation.IdRes
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.activityViewModels
@@ -30,6 +33,15 @@ class MapPersistBottomFragment :
         collapseBinding.viewSelect.setOnClickListener {
             expand()
         }
+
+        expandBinding.expCall.setOnClickListener {
+            if (viewModel.call()) {
+                val intent: Intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:${viewModel.phone.value}"))
+                startActivity(intent)
+            } else {
+                Toast.makeText(context, EMPTY_PHONE_NUMBER, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
     companion object {
         private val TAG = MapPersistBottomFragment::class.simpleName
@@ -43,6 +55,8 @@ class MapPersistBottomFragment :
                         .replace(containerViewId, this, TAG)
                         .commitAllowingStateLoss()
                 }
+
+        private const val EMPTY_PHONE_NUMBER= "연락처가 등록되지 않았습니다."
     }
 
 }

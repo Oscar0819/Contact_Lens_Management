@@ -1,7 +1,6 @@
 package com.eunwoo.contactlensmanagement.fragment
 
 import android.content.Context
-import android.graphics.PointF
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
@@ -9,14 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.fragment.app.*
 
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
 import com.eunwoo.contactlensmanagement.BuildConfig
-import com.eunwoo.contactlensmanagement.MainActivity
-import com.eunwoo.contactlensmanagement.R
+import com.eunwoo.contactlensmanagement.activity.MainActivity
 
 import com.eunwoo.contactlensmanagement.ResultSearchKeyword
 import com.eunwoo.contactlensmanagement.databinding.MapFragmentBinding
@@ -28,10 +23,6 @@ import com.naver.maps.map.*
 import com.naver.maps.map.overlay.Marker
 import com.naver.maps.map.overlay.Overlay
 import com.naver.maps.map.util.FusedLocationSource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -63,11 +54,7 @@ class MapFragment: Fragment(), OnMapReadyCallback {
     private var initCnt: Int = 0
     val markers = mutableListOf<Marker>()
 
-    private var mapPersistBottomFragment: MapPersistBottomFragment? = null
-
-    private val viewModel: MainViewModel by activityViewModels()
-
-    val mainActivity: MainActivity by lazy {
+    private val mainActivity: MainActivity by lazy {
         (activity as MainActivity)
     }
 

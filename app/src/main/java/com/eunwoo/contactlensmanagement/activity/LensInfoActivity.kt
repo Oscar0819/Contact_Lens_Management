@@ -1,4 +1,4 @@
-package com.eunwoo.contactlensmanagement
+package com.eunwoo.contactlensmanagement.activity
 
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.DatePicker
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
+import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.databinding.ActivityLensInfoBinding
 import com.eunwoo.contactlensmanagement.viewmodel.LensInfoViewModel
 import java.util.*
@@ -135,7 +136,7 @@ class LensInfoActivity : AppCompatActivity() {
                     }
                 })
                 .setNegativeButton("cancel", object : DialogInterface.OnClickListener {
-                    override fun onClick(dialog: DialogInterface, which: Int) {
+                    override  fun onClick(dialog: DialogInterface, which: Int) {
                     }
                 })
                 .create()

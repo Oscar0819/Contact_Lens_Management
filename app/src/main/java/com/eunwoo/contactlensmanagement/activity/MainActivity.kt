@@ -1,24 +1,18 @@
-package com.eunwoo.contactlensmanagement
+package com.eunwoo.contactlensmanagement.activity
 
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.Observer
+import com.eunwoo.contactlensmanagement.Place
+import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.databinding.ActivityMainBinding
-import com.eunwoo.contactlensmanagement.enums.PageType
 import com.eunwoo.contactlensmanagement.fragment.LensManagementFragment
 import com.eunwoo.contactlensmanagement.fragment.MapFragment
 import com.eunwoo.contactlensmanagement.fragment.MapPersistBottomFragment
 import com.eunwoo.contactlensmanagement.fragment.ProfileFragment
-import com.eunwoo.contactlensmanagement.receiver.EveryDayReceiver
 import com.eunwoo.contactlensmanagement.viewmodel.MainViewModel
 import java.util.*
 
@@ -125,7 +119,9 @@ class MainActivity : AppCompatActivity() {
         if (bottomFragmentCnt == 0) {
             Log.d(TAG, "Show")
             bottomFragmentCnt++
-            mapPersistBottomFragment = MapPersistBottomFragment.show(fragmentManager, R.id.view_bottom_sheet)
+            mapPersistBottomFragment = MapPersistBottomFragment.show(fragmentManager,
+                R.id.view_bottom_sheet
+            )
         } else {
             Log.d(TAG, "Visible")
             mapPersistBottomFragment!!.view?.visibility = View.VISIBLE

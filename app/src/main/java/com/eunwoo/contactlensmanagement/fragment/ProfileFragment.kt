@@ -1,6 +1,7 @@
 package com.eunwoo.contactlensmanagement.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -47,6 +48,10 @@ class ProfileFragment: Fragment() {
         Log.d(TAG, "ProfileFragment - onCreateView() called")
 
         binding = ProfileFragmentBinding.inflate(inflater, container, false)
+
+        binding.profileCardview.setOnClickListener {
+            val intent = Intent()
+        }
 
         return binding.root
         //return super.onCreateView(inflater, container, savedInstanceState)

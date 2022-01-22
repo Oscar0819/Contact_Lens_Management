@@ -2,23 +2,19 @@ package com.eunwoo.contactlensmanagement.fragment
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Resources
 import android.graphics.*
-import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.eunwoo.contactlensmanagement.*
+import com.eunwoo.contactlensmanagement.activity.LensInfoActivity
 import com.eunwoo.contactlensmanagement.database.LensDatabase
 import com.eunwoo.contactlensmanagement.databinding.LensManagementFragmentBinding
-import com.eunwoo.contactlensmanagement.helper.SwipeHelperCallback
 
 class LensManagementFragment: Fragment() {
     // 싱글톤

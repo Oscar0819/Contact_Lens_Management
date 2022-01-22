@@ -1,4 +1,4 @@
-package com.eunwoo.contactlensmanagement
+package com.eunwoo.contactlensmanagement.activity
 
 import android.app.AlarmManager
 import android.app.PendingIntent
@@ -6,14 +6,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.work.*
+import com.eunwoo.contactlensmanagement.EveryDayWorker
+import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.receiver.EveryDayReceiver
 import kotlinx.coroutines.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class SplashActivity : AppCompatActivity() {
 
@@ -81,7 +86,7 @@ class SplashActivity : AppCompatActivity() {
         val check: Boolean = sp.getBoolean("checkTheFirst", false)
 
         if (!check) {
-            setAlarm()
+            doWorkManager()
             val spEdit: SharedPreferences.Editor = sp.edit()
             spEdit.putBoolean("checkTheFirst", true)
             spEdit.commit()
@@ -110,6 +115,44 @@ class SplashActivity : AppCompatActivity() {
             AlarmManager.INTERVAL_DAY,
             pendingIntent
         )
+    }
+
+    private fun doWorkManager() {
+        val calendar = Calendar.getInstance()
+        val delay = calculateDelay(calendar)
+
+        if (Build.VERSION_CODES.O <= Build.VERSION.SDK_INT) {
+            val periodicWorkRequest = PeriodicWorkRequestBuilder<EveryDayWorker>(15, TimeUnit.MINUTES)
+                .setInitialDelay(delay, TimeUnit.SECONDS)
+                .addTag("EveryDayWork")
+                .build()
+            WorkManager.getInstance(this).enqueue(periodicWorkRequest)
+        }
+
+
+    }
+
+    private fun calculateDelay(startCalendar: Calendar): Long {
+        // 오늘 알람이 울릴 시각 설정
+        val todayCalendar = Calendar.getInstance()
+        todayCalendar.set(Calendar.HOUR_OF_DAY, 4)
+//        todayCalendar.set(Calendar.MINUTE, 0)
+        todayCalendar.add(Calendar.DAY_OF_YEAR, 0)
+
+        var delay = (todayCalendar.time.time - startCalendar.time.time) / 1000
+
+        // 만약에 시작한 시점의 시간의 값을 뺐을 때 음수가 나오면 시간이 제대로 설정되지 않으므로
+        // todayCalendar에 24시간을 추가해서 현재 시각(startCalendar)의 값을 빼더라도
+        // 알림을 등록된 시각에 맞춰서 설정.
+        // 현재 시각이 13시, 알림으로 지정된 시각이 4시라면 (알림시각) = 4 + 24 = 28
+        // 28 - 13 = 15시간 후에 알림.. 현재 시각은 13시니 13 + 15 = 28 = 새벽 4시
+        return if (delay < 0) {
+            todayCalendar.add(Calendar.DAY_OF_YEAR, 1)
+            (todayCalendar.time.time - startCalendar.time.time) / 1000
+        } else {
+            delay
+        }
+
     }
 
 }

@@ -20,7 +20,7 @@
             android:value="${NAVER_MAP_API_KEY}" />
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".activity.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,10 +29,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LensInfoActivity"
+            android:name=".activity.LensInfoActivity"
             android:theme="@style/Theme.ContactLensManagement" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:theme="@style/Theme.ContactLensManagement"></activity>
 
         <receiver

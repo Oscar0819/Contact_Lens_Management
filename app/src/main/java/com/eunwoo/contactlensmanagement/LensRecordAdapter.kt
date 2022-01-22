@@ -5,16 +5,14 @@ import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.eunwoo.contactlensmanagement.activity.LensInfoActivity
 import com.eunwoo.contactlensmanagement.database.Lens
 import com.eunwoo.contactlensmanagement.database.LensDatabase
 import com.eunwoo.contactlensmanagement.databinding.LensRecordItemBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import java.lang.IndexOutOfBoundsException
 
 class LensRecordAdapter(val db: LensDatabase, var items: List<Lens>?)
     : RecyclerView.Adapter<LensRecordAdapter.ViewHolder>() {

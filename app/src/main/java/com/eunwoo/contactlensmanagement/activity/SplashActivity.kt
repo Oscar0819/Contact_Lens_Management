@@ -122,7 +122,7 @@ class SplashActivity : AppCompatActivity() {
         val delay = calculateDelay(calendar)
 
         if (Build.VERSION_CODES.O <= Build.VERSION.SDK_INT) {
-            val periodicWorkRequest = PeriodicWorkRequestBuilder<EveryDayWorker>(15, TimeUnit.MINUTES)
+            val periodicWorkRequest = PeriodicWorkRequestBuilder<EveryDayWorker>(24, TimeUnit.HOURS)
                 .setInitialDelay(delay, TimeUnit.SECONDS)
                 .addTag("EveryDayWork")
                 .build()

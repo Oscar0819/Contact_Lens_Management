@@ -53,7 +53,7 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
     val id: Long
         get() = _id
 
-    private lateinit var db: LensDatabase
+//    private lateinit var db: LensDatabase
 
     private val lensInfoRepository = LensInfoRepository(application)
 
@@ -110,7 +110,7 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
         get() = _currentCnt
 
     init {
-        db = LensDatabase.getInstance(application)
+//        db = LensDatabase.getInstance(application)
     }
 
     // Rest of the ViewModel...
@@ -120,7 +120,7 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
         if (currentCnt == 1) {
             CoroutineScope(Dispatchers.Default).launch {
                 lensInfoRepository.getList(index.toInt())
-                val lensData: Lens = db.lensDao().getList()[index.toInt()]
+                val lensData: Lens = lensInfoRepository.getList(index.toInt())// db.lensDao().getList()[index.toInt()]
                 var lensInfo: LensInfo = LensInfo(lensData.name!!,
                     lensData.leftSight!!,
                     lensData.rightSight!!,
@@ -201,17 +201,18 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
             lensInfoRepository.delete(lens)
 //            db.lensDao().delete(db.lensDao().getList()[_index.toInt()])
 
-            val size = db.lensDao().getList().size
+            val size =  lensInfoRepository.getSize()// db.lensDao().getList().size
             // 위 코드로인해 사이즈가 감소한 상태의 사이즈를 가져옴.. 그래서 0부터 시작하는 인덱스와 맞춰서 계산
             if (_index.toInt() != size) { // 삭제한 인덱스 값이 List의 값과 같은지 확인했을 때 같으면
                 for (i in index.toInt()..size) {// index = 1, size = 4 (..연산자는 1~4 until은 1~3)
-                    val lens: Lens = db.lensDao().getList()[i]
+                    val lens: Lens = lensInfoRepository.getList(i)// db.lensDao().getList()[i]
                     if (i == size) {
-                        db.lensDao().delete(lens)
+                        lensInfoRepository.delete(lens)// db.lensDao().delete(lens)
                     }
                     lens.id = lens.id?.minus(1)
                     // 동일한 id를 넣었을 때 덮어씌우기 설정되어있음
-                    db.lensDao().insert(lens)
+                    lensInfoRepository.insert(lens)
+                    // db.lensDao().insert(lens)
                 }
             } else {
                 // 같은 경우엔 마지막 인덱스이므로 정렬을 할 필요가 없음

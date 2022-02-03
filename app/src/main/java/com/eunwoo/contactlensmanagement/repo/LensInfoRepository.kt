@@ -29,8 +29,12 @@ class LensInfoRepository(application: Application) {
         lensDao.update(lens)
     }
 
-    fun getList(index: Int): Lens{
+    fun getList(index: Int): Lens {
         return lensDao.getList()[index]
+    }
+
+    fun getSize(): Int {
+        return lensDao.getList().size
     }
 
 }

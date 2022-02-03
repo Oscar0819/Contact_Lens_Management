@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.annotation.MainThread
 import androidx.fragment.app.FragmentManager
 import com.eunwoo.contactlensmanagement.Place
 import com.eunwoo.contactlensmanagement.R

@@ -18,7 +18,6 @@ interface KakaoAPI {
         @Query("y") y: Double,
         @Query("radius") radius: Long
 
-
     ): Call<ResultSearchKeyword>    // 받아온 정보가 ResultSearchKeyword 클래스의 구조로 담김
 
 //    companion object {

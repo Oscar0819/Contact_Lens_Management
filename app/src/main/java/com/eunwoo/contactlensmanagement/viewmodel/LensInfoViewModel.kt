@@ -42,7 +42,7 @@ class LensInfoViewModel(application: Application) : AndroidViewModel(application
 
     // 이전 액티비티에서 받은 데이터
     // code는 저장, 수정 관련 신호 0 = 저장, 1 = 수정
-    // 기본 디폴트 값
+    // 기본 값
     private var _code: Int = -1
     val code: Int
         get() = _code

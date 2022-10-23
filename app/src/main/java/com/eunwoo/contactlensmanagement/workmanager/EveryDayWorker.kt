@@ -1,4 +1,4 @@
-package com.eunwoo.contactlensmanagement
+package com.eunwoo.contactlensmanagement.workmanager
 
 import android.app.Notification
 import android.app.NotificationChannel
@@ -9,12 +9,9 @@ import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.work.*
+import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.database.Lens
 import com.eunwoo.contactlensmanagement.database.LensDatabase
-import com.eunwoo.contactlensmanagement.receiver.EveryDayReceiver
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class EveryDayWorker(appContext: Context, workerParams: WorkerParameters):
         Worker(appContext, workerParams) {

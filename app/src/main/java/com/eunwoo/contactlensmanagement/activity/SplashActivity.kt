@@ -13,7 +13,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.work.*
-import com.eunwoo.contactlensmanagement.EveryDayWorker
+import com.eunwoo.contactlensmanagement.workmanager.EveryDayWorker
 import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.receiver.EveryDayReceiver
 import kotlinx.coroutines.*

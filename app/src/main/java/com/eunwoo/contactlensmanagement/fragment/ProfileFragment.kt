@@ -8,10 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.eunwoo.contactlensmanagement.R
 import com.eunwoo.contactlensmanagement.databinding.LensManagementFragmentBinding
 import com.eunwoo.contactlensmanagement.databinding.ProfileFragmentBinding
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
 
 class ProfileFragment: Fragment() {
     // 싱글톤
@@ -51,6 +53,7 @@ class ProfileFragment: Fragment() {
 
         binding.profileCardview.setOnClickListener {
             val intent = Intent()
+
         }
 
         return binding.root

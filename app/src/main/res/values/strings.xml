@@ -3,5 +3,6 @@
     <string name="main_tab_title_page_1">Map</string>
     <string name="main_tab_title_page_2">Management</string>
     <string name="main_tab_title_page_3">Profile</string>
-
+    <string name="signin_complete">로그인 성공</string>
+    <string name="signin_faile">로그인 실패</string>
 </resources>
